@@ -31,7 +31,6 @@
             btn_Listen = new Button();
             textMessage = new TextBox();
             grb_Message = new GroupBox();
-            button1 = new Button();
             panel_Top = new Panel();
             panel_Monitor = new Panel();
             panel_Notification = new Panel();
@@ -73,7 +72,6 @@
             // 
             // grb_Message
             // 
-            grb_Message.Controls.Add(button1);
             grb_Message.Controls.Add(panel_Top);
             grb_Message.Controls.Add(panel_Monitor);
             grb_Message.Dock = DockStyle.Fill;
@@ -85,16 +83,6 @@
             grb_Message.TabIndex = 4;
             grb_Message.TabStop = false;
             grb_Message.Text = "Message";
-            // 
-            // button1
-            // 
-            button1.Location = new Point(467, 3);
-            button1.Name = "button1";
-            button1.Size = new Size(94, 29);
-            button1.TabIndex = 7;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
             // 
             // panel_Top
             // 
@@ -212,6 +200,5 @@
         private Panel panel_Notification;
         private Panel panel_Button;
         private Panel panel_Top;
-        private Button button1;
     }
 }

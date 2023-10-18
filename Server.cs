@@ -31,11 +31,13 @@ namespace The_Application_Of_Asymetric_Cipher
             panel_Server.Dock = DockStyle.Fill;
             StartToListen();
         }
-
+        // Khởi tạo các tham số cần thiết cho kết nối mạng và mã hóa.
         private TcpListener server;
         private TcpClient client;
         private NetworkStream stream;
         private RSAParameters rsaPa;
+
+        // Tạo một lớp để lưu trữ các kết nối và khóa công khai của Client.
         public class KeyTCPClient
         {
             public TcpClient tcpClient { get; set; }
@@ -48,7 +50,7 @@ namespace The_Application_Of_Asymetric_Cipher
         }
         List<KeyTCPClient> clients = new List<KeyTCPClient>();
 
-        void StartToListen()
+        private void StartToListen()    // Lắng nghe kết nối từ Client.
         {
             try
             {
@@ -63,7 +65,7 @@ namespace The_Application_Of_Asymetric_Cipher
                 return;
             }
         }
-        private void AcceptClients()
+        private void AcceptClients()    // Chấp nhận kết nối.
         {
             while (true)
             {
@@ -73,11 +75,10 @@ namespace The_Application_Of_Asymetric_Cipher
                 Task.Run(() => HandleClientMessages(client));
             }
         }
-        void HandleClientMessages(TcpClient client)
+        void HandleClientMessages(TcpClient client) // Nhận dữ liệu từ Client.
         {
-            byte[] buffer = new byte[1024*4];
+            byte[] buffer = new byte[1024 * 4];
             int bytesRead;
-
             while (true)
             {
                 stream = client.GetStream();
@@ -87,7 +88,7 @@ namespace The_Application_Of_Asymetric_Cipher
                     if (bytesRead == 0) break;
                     string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
                     var mes = message.Split('\n');
-                    
+        // Nếu dữ liệu gửi tới là khóa công khai, tiến hành lưu trữ và broadcast cho các Client còn lại.
                     if (message.Contains("New client connected from: 127.0.0.1"))
                     {
                         var posSlN = Array.IndexOf(buffer, (byte)10);
@@ -106,18 +107,15 @@ namespace The_Application_Of_Asymetric_Cipher
                             textNote.AppendText(mes[0] + Environment.NewLine);
                         });
                         string keys = "New client connected from: 127.0.0.1\n";
-                        
                         for (int i = 0; i < clients.Count - 1; i++)
                         {
-                            //Gửi khóa của những client còn lại cho chính nó
+        //Gửi khóa công khai của những Client còn lại cho chính nó.
                             byte[] flag = Encoding.UTF8.GetBytes(keys);
                             flag.CopyTo(buffer, 0);
                             var kEY = RSAParametersToBytes(clients[i].publicKey);
                             kEY.CopyTo(buffer, flag.Length);
                             stream.Write(buffer, 0, buffer.Length);
-                            //Gửi khóa của chính nó cho những thằng còn lại
-                            //flag = Encoding.UTF8.GetBytes(keys);
-                            //buffer = Encoding.UTF8.GetBytes(keys);
+        //Gửi khóa công khai của chính nó cho những Client còn lại.
                             flag.CopyTo(buffer, 0);
                             kEY = RSAParametersToBytes(rsaPa);
                             kEY.CopyTo(buffer, flag.Length);
@@ -125,7 +123,7 @@ namespace The_Application_Of_Asymetric_Cipher
                             netStream.Write(buffer, 0, buffer.Length);
                         }
                     }
-                    else
+                    else   // Nếu dữ liệu được gửi đến là tin nhắn, tiến hành broadcast
                     {
                         this.Invoke((MethodInvoker)delegate
                         {
@@ -133,8 +131,6 @@ namespace The_Application_Of_Asymetric_Cipher
                         });
                         BroadcastMessage(message, client);
                     }
-
-                    
                 }
                 catch
                 {
@@ -145,7 +141,7 @@ namespace The_Application_Of_Asymetric_Cipher
             }
         }
 
-        void BroadcastMessage(string message, TcpClient sender)
+        void BroadcastMessage(string message, TcpClient sender) // Broadcast tin nhắn
         {
             byte[] buffer = Encoding.UTF8.GetBytes(message);
             foreach (KeyTCPClient receiver in clients)
@@ -180,108 +176,79 @@ namespace The_Application_Of_Asymetric_Cipher
             clients.Clear();
             server.Stop();
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            string s = "";
-            foreach (var cli in clients)
-            {
-                s += GetRSAPublicKey(cli.publicKey) + " ";
-            }
-            MessageBox.Show(s);
-        }
-
-        public string GetRSAPublicKey(RSAParameters key)
-        {
-            var sw = new StringWriter();
-            var xs = new XmlSerializer(typeof(RSAParameters));
-            xs.Serialize(sw, key);
-            return sw.ToString();
-        }
-
+        // Chuyển từ khóa công khai thành dữ liệu kiểu byte.
         public static byte[] RSAParametersToBytes(RSAParameters parameters)
         {
             List<byte> bytesList = new List<byte>();
-
-            // Modulus
-            bytesList.AddRange(parameters.Modulus);
-
-            // Exponent
-            bytesList.AddRange(parameters.Exponent);
-
-            // P
-            bytesList.AddRange(parameters.P);
-
-            // Q
-            bytesList.AddRange(parameters.Q);
-
+            // Modulus: Tích P và Q
+            if (parameters.Modulus != null)
+                bytesList.AddRange(parameters.Modulus);
+            // Exponent: e
+            if (parameters.Exponent != null)
+                bytesList.AddRange(parameters.Exponent);
+            // P: Số nguyên tố
+            if (parameters.P != null)
+                bytesList.AddRange(parameters.P);
+            // Q: Số nguyên tố khác P
+            if (parameters.Q != null)
+                bytesList.AddRange(parameters.Q);
             // DP
-            bytesList.AddRange(parameters.DP);
-
+            if (parameters.DP != null)
+                bytesList.AddRange(parameters.DP);
             // DQ
-            bytesList.AddRange(parameters.DQ);
-
+            if (parameters.DQ != null)
+                bytesList.AddRange(parameters.DQ);
             // InverseQ
-            bytesList.AddRange(parameters.InverseQ);
-
+            if (parameters.InverseQ != null)
+                bytesList.AddRange(parameters.InverseQ);
             // D
-            bytesList.AddRange(parameters.D);
-
+            if (parameters.D != null)
+                bytesList.AddRange(parameters.D);
             return bytesList.ToArray();
         }
-
+        // Chuyển từ dữ liệu kiểu byte nhận được thành khóa công khai.
         public static RSAParameters BytesToRSAParameters(byte[] bytes)
         {
             RSAParameters parameters = new RSAParameters();
-
             // Modulus
-            int start = 0;
-            int length = 256;//BitConverter.ToInt32(bytes, start);
+            int start = 0, length = 256;
             parameters.Modulus = new byte[256];
             Array.Copy(bytes, start, parameters.Modulus, 0, length);
-
             // Exponent
             start += length;
-            length = 3;// BitConverter.ToInt32(bytes, start);
+            length = 3;
             parameters.Exponent = new byte[length];
             Array.Copy(bytes, start, parameters.Exponent, 0, length);
-
             // P
             start += length;
-            length = 128;// BitConverter.ToInt32(bytes, start);
+            length = 128;
             parameters.P = new byte[length];
             Array.Copy(bytes, start, parameters.P, 0, length);
-
             // Q
             start += length;
-            length = 128;// BitConverter.ToInt32(bytes, start);
+            length = 128;
             parameters.Q = new byte[length];
             Array.Copy(bytes, start, parameters.Q, 0, length);
-
             // DP
             start += length;
-            length = 128;//BitConverter.ToInt32(bytes, start);
+            length = 128;
             parameters.DP = new byte[length];
             Array.Copy(bytes, start, parameters.DP, 0, length);
-
             // DQ
             start += length;
-            length = 128;// BitConverter.ToInt32(bytes, start);
+            length = 128;
             parameters.DQ = new byte[length];
             Array.Copy(bytes, start, parameters.DQ, 0, length);
-
             // InverseQ
             start += length;
-            length = 128;// BitConverter.ToInt32(bytes, start);
+            length = 128;
             parameters.InverseQ = new byte[length];
             Array.Copy(bytes, start, parameters.InverseQ, 0, length);
-
             // D
             start += length;
-            length = 256;// BitConverter.ToInt32(bytes, start);
+            length = 256;
             parameters.D = new byte[length];
             Array.Copy(bytes, start, parameters.D, 0, length);
-
             return parameters;
         }
     }
