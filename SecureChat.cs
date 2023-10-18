@@ -5,7 +5,8 @@ namespace The_Application_Of_Asymetric_Cipher
         public SecureChat()
         {
             InitializeComponent();
-
+            btn_Client.Enabled = false;
+            panel_icon_cli.Enabled = false;
         }
 
         static int numClient = 1;
@@ -25,30 +26,42 @@ namespace The_Application_Of_Asymetric_Cipher
             childForm.BringToFront();
             childForm.Show();
         }
-        private void btn_Server_Click(object sender, EventArgs e)
+
+        private void OpenServer()
         {
             OpenChildForm(new Server());
             btn_Server.Enabled = false;
             panel_icon_sv.Enabled = false;
+            btn_Client.Enabled = true;
+            panel_icon_cli.Enabled = true;
+            panel_icon_sv.BackgroundImage = new Bitmap(new FileStream(
+                "sv_off-removebg-preview.png", FileMode.Open));
+        }
+
+        private void OpenClient()
+        {
+            Client cl = new Client(numClient++);
+            cl.Show();
+        }
+
+        private void btn_Server_Click(object sender, EventArgs e)
+        {
+            OpenServer();
         }
 
         private void btn_Client_Click(object sender, EventArgs e)
         {
-            Client cl = new Client(numClient++);
-            cl.Show();
+            OpenClient();
         }
 
         private void panel_icon_sv_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new Server());
-            btn_Server.Enabled = false;
-            panel_icon_sv.Enabled = false;
+            OpenServer();
         }
 
         private void panel_icon_cli_Click(object sender, EventArgs e)
         {
-            Client cl = new Client(numClient++);
-            cl.Show();
+            OpenClient();
         }
     }
 }
