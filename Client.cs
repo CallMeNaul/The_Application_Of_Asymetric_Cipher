@@ -121,11 +121,15 @@ namespace The_Application_Of_Asymetric_Cipher
                     String plainText = RSADecrypt(message, privateKey);
                     AddMessageToChatWindow(plainText);
                 }
-                catch { }
+                catch
+                {
+                    DisconnectFrom();
+                    return;
+                }
             }
         }
 
-        private void Client_FormClosed(object sender, FormClosedEventArgs e) { DisconnectFrom();}
+        private void Client_FormClosed(object sender, FormClosedEventArgs e) { DisconnectFrom(); }
 
         private void btSend_Click(object sender, EventArgs e) { SendMessage(); }
 

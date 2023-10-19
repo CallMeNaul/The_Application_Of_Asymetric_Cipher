@@ -75,19 +75,12 @@ namespace The_Application_Of_Asymetric_Cipher
                     client = server.AcceptTcpClient();
                     KeyTCPClient keyTcpCli = new KeyTCPClient(client, rsaPa, 0);
                     clients.Add(keyTcpCli);
-                    Task.Run(() =>
-                    {
-                        keyTcpCli = GetKeyTCPClientFromTCPClient(HandleClientMessages(client));
-                        var iP = (IPEndPoint)keyTcpCli.tcpClient.Client.RemoteEndPoint;
-                        client.Close();
-                        clients.Remove(GetKeyTCPClientFromTCPClient(client));
-                        this.Invoke((MethodInvoker)delegate
-                        {
-                            textNote.AppendText("Disconnect from " + iP.ToString() + "\n" + Environment.NewLine);
-                        });
-                    });
+                    Task.Run(() => HandleClientMessages(client));
                 }
-                catch { }
+                catch
+                {
+
+                }
             }
         }
 
@@ -100,7 +93,7 @@ namespace The_Application_Of_Asymetric_Cipher
             }
             return null;
         }
-        TcpClient HandleClientMessages(TcpClient client) // Nhận dữ liệu từ Client.
+        void HandleClientMessages(TcpClient client) // Nhận dữ liệu từ Client.
         {
             byte[] buffer = new byte[1024 * 4];
             int bytesRead;
@@ -111,7 +104,14 @@ namespace The_Application_Of_Asymetric_Cipher
                 {
                     stream = client.GetStream();
                     bytesRead = stream.Read(buffer, 0, buffer.Length);
-                    if (bytesRead == 0) break;
+                    if (bytesRead == 0)
+                    {
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            textNote.AppendText("Dconnected from " + client.Client.RemoteEndPoint.ToString() + Environment.NewLine);
+                        });
+                        break;
+                    }
                     string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
                     // Nếu dữ liệu gửi tới là khóa công khai, tiến hành lưu trữ.
                     if (message.Contains("New client connected from 127.0.0.1"))
@@ -133,6 +133,16 @@ namespace The_Application_Of_Asymetric_Cipher
                             textNote.AppendText("New client connected from " + client.Client.RemoteEndPoint.ToString() + Environment.NewLine);
                         });
                     }
+                    else if (message.Contains("Disconnect from 127.0.0.1"))
+                    {
+                        var iP = (IPEndPoint)client.Client.RemoteEndPoint;
+                        client.Close();
+                        clients.Remove(GetKeyTCPClientFromTCPClient(client));
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            textNote.AppendText("Disconnect from " + iP.ToString() + "\n" + Environment.NewLine);
+                        });
+                    }
                     else   // Nếu dữ liệu được gửi đến là tin nhắn, tiến hành broadcast
                     {
                         plainText = RSADecrypt(message, GetKeyTCPClientFromTCPClient(client).publicKey);
@@ -143,9 +153,8 @@ namespace The_Application_Of_Asymetric_Cipher
                         BroadcastMessage(plainText, client);
                     }
                 }
-                catch { }
+                catch { break; }
             }
-            return client;
         }
 
         void BroadcastMessage(string message, TcpClient sender) // Broadcast tin nhắn
@@ -154,13 +163,17 @@ namespace The_Application_Of_Asymetric_Cipher
             byte[] buffer;
             foreach (KeyTCPClient receiver in clients)
             {
-                if (receiver.tcpClient != sender)
+                try
                 {
-                    cipherText = RSAEncrypt(message, receiver.publicKey);
-                    buffer = Encoding.UTF8.GetBytes(cipherText);
-                    NetworkStream netStream = receiver.tcpClient.GetStream();
-                    netStream.Write(buffer, 0, buffer.Length);
+                    if (receiver.tcpClient != sender)
+                    {
+                        cipherText = RSAEncrypt(message, receiver.publicKey);
+                        buffer = Encoding.UTF8.GetBytes(cipherText);
+                        NetworkStream netStream = receiver.tcpClient.GetStream();
+                        netStream.Write(buffer, 0, buffer.Length);
+                    }
                 }
+                catch (Exception) { }
             }
         }
 

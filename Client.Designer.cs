@@ -57,7 +57,7 @@
             // textDisplayMessage
             // 
             textDisplayMessage.Dock = DockStyle.Fill;
-            textDisplayMessage.Font = new Font("Monotype Corsiva", 12F, FontStyle.Italic, GraphicsUnit.Point);
+            textDisplayMessage.Font = new Font("Monotype Corsiva", 13.8F, FontStyle.Italic, GraphicsUnit.Point);
             textDisplayMessage.Location = new Point(4, 30);
             textDisplayMessage.Margin = new Padding(4);
             textDisplayMessage.Multiline = true;
