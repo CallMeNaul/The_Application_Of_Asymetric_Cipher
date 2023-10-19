@@ -24,7 +24,6 @@ namespace The_Application_Of_Asymetric_Cipher
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
-            btn_Listen.Enabled = false;
             textNote.ReadOnly = true;
             textMessage.ReadOnly = true;
             this.Size = new Size(818, 687);
@@ -42,10 +41,12 @@ namespace The_Application_Of_Asymetric_Cipher
         {
             public TcpClient tcpClient { get; set; }
             public RSAParameters publicKey { get; set; }
-            public KeyTCPClient(TcpClient tCli, RSAParameters key)
+            public int port;
+            public KeyTCPClient(TcpClient tCli, RSAParameters key, int p)
             {
                 this.tcpClient = tCli;
                 this.publicKey = key;
+                this.port = p;
             }
         }
         List<KeyTCPClient> clients = new List<KeyTCPClient>();
@@ -69,85 +70,94 @@ namespace The_Application_Of_Asymetric_Cipher
         {
             while (true)
             {
-                client = server.AcceptTcpClient();
-                KeyTCPClient keyTcpCli = new KeyTCPClient(client, rsaPa);
-                clients.Add(keyTcpCli);
-                Task.Run(() => HandleClientMessages(client));
+                try
+                {
+                    client = server.AcceptTcpClient();
+                    KeyTCPClient keyTcpCli = new KeyTCPClient(client, rsaPa, 0);
+                    clients.Add(keyTcpCli);
+                    Task.Run(() =>
+                    {
+                        keyTcpCli = GetKeyTCPClientFromTCPClient(HandleClientMessages(client));
+                        var iP = (IPEndPoint)keyTcpCli.tcpClient.Client.RemoteEndPoint;
+                        client.Close();
+                        clients.Remove(GetKeyTCPClientFromTCPClient(client));
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            textNote.AppendText("Disconnect from " + iP.ToString() + "\n" + Environment.NewLine);
+                        });
+                    });
+                }
+                catch { }
             }
         }
-        void HandleClientMessages(TcpClient client) // Nhận dữ liệu từ Client.
+
+        KeyTCPClient GetKeyTCPClientFromTCPClient(TcpClient cli)    //Hàm để trả về đối tượng của danh sách các Client
+        {
+            foreach (var client in clients)
+            {
+                if (client.tcpClient == cli)
+                    return client;
+            }
+            return null;
+        }
+        TcpClient HandleClientMessages(TcpClient client) // Nhận dữ liệu từ Client.
         {
             byte[] buffer = new byte[1024 * 4];
             int bytesRead;
+            String plainText = "";
             while (true)
             {
-                stream = client.GetStream();
                 try
                 {
+                    stream = client.GetStream();
                     bytesRead = stream.Read(buffer, 0, buffer.Length);
                     if (bytesRead == 0) break;
                     string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    var mes = message.Split('\n');
-        // Nếu dữ liệu gửi tới là khóa công khai, tiến hành lưu trữ và broadcast cho các Client còn lại.
-                    if (message.Contains("New client connected from: 127.0.0.1"))
+                    // Nếu dữ liệu gửi tới là khóa công khai, tiến hành lưu trữ.
+                    if (message.Contains("New client connected from 127.0.0.1"))
                     {
-                        var posSlN = Array.IndexOf(buffer, (byte)10);
-                        var data = new byte[2048];
-                        data = buffer[(posSlN + 1)..(buffer.Length - 1)];
-                        rsaPa = BytesToRSAParameters(data);
+                        var posLineBreak = message.IndexOf('\n');
+                        IPEndPoint iP = (IPEndPoint)client.Client.RemoteEndPoint;
+                        var string_rsaPa = message.Substring(posLineBreak + 1);
+                        rsaPa = StringToKey(string_rsaPa);
                         foreach (var cli in clients)
                         {
                             if (client == cli.tcpClient)
                             {
                                 cli.publicKey = rsaPa;
+                                cli.port = iP.Port;
                             }
                         }
                         this.Invoke((MethodInvoker)delegate
                         {
-                            textNote.AppendText(mes[0] + Environment.NewLine);
+                            textNote.AppendText("New client connected from " + client.Client.RemoteEndPoint.ToString() + Environment.NewLine);
                         });
-                        string keys = "New client connected from: 127.0.0.1\n";
-                        for (int i = 0; i < clients.Count - 1; i++)
-                        {
-        //Gửi khóa công khai của những Client còn lại cho chính nó.
-                            byte[] flag = Encoding.UTF8.GetBytes(keys);
-                            flag.CopyTo(buffer, 0);
-                            var kEY = RSAParametersToBytes(clients[i].publicKey);
-                            kEY.CopyTo(buffer, flag.Length);
-                            stream.Write(buffer, 0, buffer.Length);
-        //Gửi khóa công khai của chính nó cho những Client còn lại.
-                            flag.CopyTo(buffer, 0);
-                            kEY = RSAParametersToBytes(rsaPa);
-                            kEY.CopyTo(buffer, flag.Length);
-                            NetworkStream netStream = clients[i].tcpClient.GetStream();
-                            netStream.Write(buffer, 0, buffer.Length);
-                        }
                     }
                     else   // Nếu dữ liệu được gửi đến là tin nhắn, tiến hành broadcast
                     {
+                        plainText = RSADecrypt(message, GetKeyTCPClientFromTCPClient(client).publicKey);
                         this.Invoke((MethodInvoker)delegate
                         {
-                            textMessage.AppendText(mes[0] + Environment.NewLine);
+                            textMessage.AppendText(plainText + Environment.NewLine);
                         });
-                        BroadcastMessage(message, client);
+                        BroadcastMessage(plainText, client);
                     }
                 }
-                catch
-                {
-                    KeyTCPClient cli = new KeyTCPClient(client, rsaPa);
-                    clients.Remove(cli);
-                    break;
-                }
+                catch { }
             }
+            return client;
         }
 
         void BroadcastMessage(string message, TcpClient sender) // Broadcast tin nhắn
         {
-            byte[] buffer = Encoding.UTF8.GetBytes(message);
+            String cipherText;
+            byte[] buffer;
             foreach (KeyTCPClient receiver in clients)
             {
                 if (receiver.tcpClient != sender)
                 {
+                    cipherText = RSAEncrypt(message, receiver.publicKey);
+                    buffer = Encoding.UTF8.GetBytes(cipherText);
                     NetworkStream netStream = receiver.tcpClient.GetStream();
                     netStream.Write(buffer, 0, buffer.Length);
                 }
@@ -159,97 +169,28 @@ namespace The_Application_Of_Asymetric_Cipher
             clients.Clear();
             server.Stop();
         }
-
-        private void btn_Listen_Click(object sender, EventArgs e)
+        public string RSAEncrypt(string plainText, RSAParameters key)   // Mã hóa thông tin để gửi đi
         {
-            if (!btn_Stop.Enabled)
-                btn_Stop.Enabled = true;
-            btn_Listen.Enabled = false;
-            StartToListen();
+            RSACryptoServiceProvider csp = new RSACryptoServiceProvider();
+            csp.ImportParameters(key);
+            var buffer = Encoding.UTF8.GetBytes(plainText);
+            var cypher = csp.Encrypt(buffer, false);
+            return Convert.ToBase64String(cypher);
         }
 
-        private void btn_Stop_Click(object sender, EventArgs e)
+        public string RSADecrypt(string cipherText, RSAParameters key)  // Giải mã thông tin từ Client gửi đến
         {
-            if (!btn_Listen.Enabled)
-                btn_Listen.Enabled = true;
-            btn_Stop.Enabled = false;
-            clients.Clear();
-            server.Stop();
+            RSACryptoServiceProvider csp = new RSACryptoServiceProvider();
+            var buffer = Convert.FromBase64String(cipherText);
+            csp.ImportParameters(key);
+            var plainText = csp.Decrypt(buffer, false);
+            return Encoding.UTF8.GetString(plainText);
         }
-        // Chuyển từ khóa công khai thành dữ liệu kiểu byte.
-        public static byte[] RSAParametersToBytes(RSAParameters parameters)
+        private RSAParameters StringToKey(string keyString)
         {
-            List<byte> bytesList = new List<byte>();
-            // Modulus: Tích P và Q
-            if (parameters.Modulus != null)
-                bytesList.AddRange(parameters.Modulus);
-            // Exponent: e
-            if (parameters.Exponent != null)
-                bytesList.AddRange(parameters.Exponent);
-            // P: Số nguyên tố
-            if (parameters.P != null)
-                bytesList.AddRange(parameters.P);
-            // Q: Số nguyên tố khác P
-            if (parameters.Q != null)
-                bytesList.AddRange(parameters.Q);
-            // DP
-            if (parameters.DP != null)
-                bytesList.AddRange(parameters.DP);
-            // DQ
-            if (parameters.DQ != null)
-                bytesList.AddRange(parameters.DQ);
-            // InverseQ
-            if (parameters.InverseQ != null)
-                bytesList.AddRange(parameters.InverseQ);
-            // D
-            if (parameters.D != null)
-                bytesList.AddRange(parameters.D);
-            return bytesList.ToArray();
-        }
-        // Chuyển từ dữ liệu kiểu byte nhận được thành khóa công khai.
-        public static RSAParameters BytesToRSAParameters(byte[] bytes)
-        {
-            RSAParameters parameters = new RSAParameters();
-            // Modulus
-            int start = 0, length = 256;
-            parameters.Modulus = new byte[256];
-            Array.Copy(bytes, start, parameters.Modulus, 0, length);
-            // Exponent
-            start += length;
-            length = 3;
-            parameters.Exponent = new byte[length];
-            Array.Copy(bytes, start, parameters.Exponent, 0, length);
-            // P
-            start += length;
-            length = 128;
-            parameters.P = new byte[length];
-            Array.Copy(bytes, start, parameters.P, 0, length);
-            // Q
-            start += length;
-            length = 128;
-            parameters.Q = new byte[length];
-            Array.Copy(bytes, start, parameters.Q, 0, length);
-            // DP
-            start += length;
-            length = 128;
-            parameters.DP = new byte[length];
-            Array.Copy(bytes, start, parameters.DP, 0, length);
-            // DQ
-            start += length;
-            length = 128;
-            parameters.DQ = new byte[length];
-            Array.Copy(bytes, start, parameters.DQ, 0, length);
-            // InverseQ
-            start += length;
-            length = 128;
-            parameters.InverseQ = new byte[length];
-            Array.Copy(bytes, start, parameters.InverseQ, 0, length);
-            // D
-            start += length;
-            length = 256;
-            parameters.D = new byte[length];
-            Array.Copy(bytes, start, parameters.D, 0, length);
-            return parameters;
+            var xs = new XmlSerializer(typeof(RSAParameters));
+            var key = (RSAParameters)xs.Deserialize(new StringReader(keyString));
+            return key;
         }
     }
 }

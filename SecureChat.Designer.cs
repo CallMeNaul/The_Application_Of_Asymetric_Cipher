@@ -35,13 +35,17 @@
             panel_Right_Pillar = new Panel();
             panel_Left_Pillar = new Panel();
             panel_icon_cli = new Panel();
+            panel_icon_cl_off = new Panel();
             panel_icon_sv = new Panel();
+            panel_icon_sv_off = new Panel();
             panel_Top_Button = new Panel();
             panel_Column = new Panel();
             panel_All = new Panel();
             panel_Bottom_Button.SuspendLayout();
             panel_Right_Pillar.SuspendLayout();
             panel_Left_Pillar.SuspendLayout();
+            panel_icon_cli.SuspendLayout();
+            panel_icon_sv.SuspendLayout();
             panel_Column.SuspendLayout();
             panel_All.SuspendLayout();
             SuspendLayout();
@@ -123,6 +127,7 @@
             // 
             panel_icon_cli.BackgroundImage = Properties.Resources.cli_removebg_preview;
             panel_icon_cli.BackgroundImageLayout = ImageLayout.Zoom;
+            panel_icon_cli.Controls.Add(panel_icon_cl_off);
             panel_icon_cli.Dock = DockStyle.Top;
             panel_icon_cli.Location = new Point(0, 220);
             panel_icon_cli.Name = "panel_icon_cli";
@@ -130,16 +135,37 @@
             panel_icon_cli.TabIndex = 5;
             panel_icon_cli.Click += panel_icon_cli_Click;
             // 
+            // panel_icon_cl_off
+            // 
+            panel_icon_cl_off.BackgroundImage = Properties.Resources.cli_off_removebg_preview;
+            panel_icon_cl_off.BackgroundImageLayout = ImageLayout.Zoom;
+            panel_icon_cl_off.Dock = DockStyle.Bottom;
+            panel_icon_cl_off.Location = new Point(0, 0);
+            panel_icon_cl_off.Name = "panel_icon_cl_off";
+            panel_icon_cl_off.Size = new Size(46, 220);
+            panel_icon_cl_off.TabIndex = 0;
+            // 
             // panel_icon_sv
             // 
             panel_icon_sv.BackgroundImage = Properties.Resources.sv_removebg_preview;
             panel_icon_sv.BackgroundImageLayout = ImageLayout.Zoom;
+            panel_icon_sv.Controls.Add(panel_icon_sv_off);
             panel_icon_sv.Dock = DockStyle.Top;
             panel_icon_sv.Location = new Point(0, 0);
             panel_icon_sv.Name = "panel_icon_sv";
             panel_icon_sv.Size = new Size(46, 220);
             panel_icon_sv.TabIndex = 6;
             panel_icon_sv.Click += panel_icon_sv_Click;
+            // 
+            // panel_icon_sv_off
+            // 
+            panel_icon_sv_off.BackgroundImage = Properties.Resources.sv_off_removebg_preview;
+            panel_icon_sv_off.BackgroundImageLayout = ImageLayout.Zoom;
+            panel_icon_sv_off.Dock = DockStyle.Top;
+            panel_icon_sv_off.Location = new Point(0, 0);
+            panel_icon_sv_off.Name = "panel_icon_sv_off";
+            panel_icon_sv_off.Size = new Size(46, 220);
+            panel_icon_sv_off.TabIndex = 0;
             // 
             // panel_Top_Button
             // 
@@ -182,6 +208,8 @@
             panel_Bottom_Button.ResumeLayout(false);
             panel_Right_Pillar.ResumeLayout(false);
             panel_Left_Pillar.ResumeLayout(false);
+            panel_icon_cli.ResumeLayout(false);
+            panel_icon_sv.ResumeLayout(false);
             panel_Column.ResumeLayout(false);
             panel_All.ResumeLayout(false);
             ResumeLayout(false);
@@ -200,5 +228,7 @@
         private Panel panel_Left_Pillar;
         private Panel panel_Bottom_Button;
         private Panel panel_All;
+        private Panel panel_icon_sv_off;
+        private Panel panel_icon_cl_off;
     }
 }

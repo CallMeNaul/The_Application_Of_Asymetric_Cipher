@@ -58,18 +58,18 @@
             // 
             textDisplayMessage.Dock = DockStyle.Fill;
             textDisplayMessage.Font = new Font("Monotype Corsiva", 12F, FontStyle.Italic, GraphicsUnit.Point);
-            textDisplayMessage.Location = new Point(4, 27);
+            textDisplayMessage.Location = new Point(4, 30);
             textDisplayMessage.Margin = new Padding(4);
             textDisplayMessage.Multiline = true;
             textDisplayMessage.Name = "textDisplayMessage";
             textDisplayMessage.ScrollBars = ScrollBars.Vertical;
-            textDisplayMessage.Size = new Size(984, 433);
+            textDisplayMessage.Size = new Size(984, 430);
             textDisplayMessage.TabIndex = 9;
             // 
             // textMessage
             // 
             textMessage.Dock = DockStyle.Fill;
-            textMessage.Font = new Font("Monotype Corsiva", 12F, FontStyle.Italic, GraphicsUnit.Point);
+            textMessage.Font = new Font("Monotype Corsiva", 13.8F, FontStyle.Italic, GraphicsUnit.Point);
             textMessage.Location = new Point(0, 0);
             textMessage.Margin = new Padding(4);
             textMessage.Multiline = true;
@@ -91,7 +91,7 @@
             // btSend
             // 
             btSend.Dock = DockStyle.Right;
-            btSend.Font = new Font("Monotype Corsiva", 12F, FontStyle.Italic, GraphicsUnit.Point);
+            btSend.Font = new Font("Monotype Corsiva", 13.8F, FontStyle.Italic, GraphicsUnit.Point);
             btSend.ForeColor = Color.Black;
             btSend.Location = new Point(852, 0);
             btSend.Margin = new Padding(4);
@@ -107,7 +107,7 @@
             grb_Login.Controls.Add(textName);
             grb_Login.Controls.Add(label3);
             grb_Login.Dock = DockStyle.Top;
-            grb_Login.Font = new Font("Monotype Corsiva", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            grb_Login.Font = new Font("Monotype Corsiva", 13.8F, FontStyle.Italic, GraphicsUnit.Point);
             grb_Login.ForeColor = Color.Cyan;
             grb_Login.Location = new Point(0, 0);
             grb_Login.Margin = new Padding(4);
@@ -122,19 +122,19 @@
             // 
             label3.AutoSize = true;
             label3.Dock = DockStyle.Top;
-            label3.Font = new Font("Monotype Corsiva", 12F, FontStyle.Italic, GraphicsUnit.Point);
+            label3.Font = new Font("Monotype Corsiva", 13.8F, FontStyle.Italic, GraphicsUnit.Point);
             label3.ForeColor = Color.Cyan;
-            label3.Location = new Point(4, 27);
+            label3.Location = new Point(4, 30);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
-            label3.Size = new Size(140, 24);
+            label3.Size = new Size(165, 27);
             label3.TabIndex = 8;
             label3.Text = "Insert Your Name:";
             // 
             // btn_Join
             // 
             btn_Join.Dock = DockStyle.Right;
-            btn_Join.Font = new Font("Monotype Corsiva", 12F, FontStyle.Italic, GraphicsUnit.Point);
+            btn_Join.Font = new Font("Monotype Corsiva", 13.8F, FontStyle.Italic, GraphicsUnit.Point);
             btn_Join.ForeColor = Color.Black;
             btn_Join.Location = new Point(282, 0);
             btn_Join.Margin = new Padding(4);
@@ -205,7 +205,7 @@
             // 
             grb_Message.Controls.Add(textDisplayMessage);
             grb_Message.Dock = DockStyle.Fill;
-            grb_Message.Font = new Font("Monotype Corsiva", 12F, FontStyle.Italic, GraphicsUnit.Point);
+            grb_Message.Font = new Font("Monotype Corsiva", 13.8F, FontStyle.Italic, GraphicsUnit.Point);
             grb_Message.ForeColor = Color.Cyan;
             grb_Message.Location = new Point(4, 27);
             grb_Message.Margin = new Padding(4);

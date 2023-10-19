@@ -2,11 +2,15 @@ namespace The_Application_Of_Asymetric_Cipher
 {
     public partial class SecureChat : Form
     {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public SecureChat()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             InitializeComponent();
             btn_Client.Enabled = false;
             panel_icon_cli.Enabled = false;
+            panel_icon_sv_off.Visible = false;
+            panel_icon_cl_off.Visible = true;
         }
 
         static int numClient = 1;
@@ -34,8 +38,8 @@ namespace The_Application_Of_Asymetric_Cipher
             panel_icon_sv.Enabled = false;
             btn_Client.Enabled = true;
             panel_icon_cli.Enabled = true;
-            panel_icon_sv.BackgroundImage = new Bitmap(new FileStream(
-                "sv_off-removebg-preview.png", FileMode.Open));
+            panel_icon_sv_off.Visible = true;
+            panel_icon_cl_off.Visible = false;
         }
 
         private void OpenClient()

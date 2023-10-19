@@ -63,6 +63,16 @@ namespace The_Application_Of_Asymetric_Cipher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap cli_off_removebg_preview {
+            get {
+                object obj = ResourceManager.GetObject("cli_off-removebg-preview", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap cli_removebg_preview {
             get {
                 object obj = ResourceManager.GetObject("cli-removebg-preview", resourceCulture);
