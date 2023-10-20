@@ -17,7 +17,9 @@ namespace The_Application_Of_Asymetric_Cipher
 {
     public partial class Client_Advanced : Form
     {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public Client_Advanced(int num)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             InitializeComponent();
             client_Num = num;
@@ -28,12 +30,13 @@ namespace The_Application_Of_Asymetric_Cipher
             InitKey();
         }
         public int client_Num;
+        // Tạo các biến cho việc kết nối 
         TcpClient client;
         NetworkStream stream;
         RSAParameters rsaPa;
-        byte[] buffer = new byte[1024 * 4];
+        byte[] buffer = new byte[1024 * 5];
         bool isLogin = false;
-
+        // Tạo lớp để lưu trữ khóa của các Client khác
         public class KeyTCPClient
         {
             public int port { get; set; }
@@ -70,14 +73,15 @@ namespace The_Application_Of_Asymetric_Cipher
             {
                 client = new TcpClient("127.0.0.1", 8080);
                 stream = client.GetStream();
-                string message = "New client connected from 127.0.0.1 " + textName.Text + "\n";
+                string message = "New client connected from 127.0.0.1 " + textName.Text + "\n" + publicKey;
                 Thread rec = new Thread(ReceiveMessage);
                 rec.IsBackground = true;
                 rec.Start();
-                byte[] flag = Encoding.UTF8.GetBytes(message);
-                byte[] keyByte = Encoding.UTF8.GetBytes(publicKey);
-                flag.CopyTo(buffer, 0);
-                keyByte.CopyTo(buffer, flag.Length);
+                //byte[] flag = Encoding.UTF8.GetBytes(message);
+                //byte[] keyByte = Encoding.UTF8.GetBytes(publicKey);
+                //flag.CopyTo(buffer, 0);
+                byte[] keyByte = Encoding.UTF8.GetBytes(message);
+                keyByte.CopyTo(buffer, 0);
                 stream.Write(buffer, 0, buffer.Length);
             }
             catch (Exception)
@@ -118,7 +122,7 @@ namespace The_Application_Of_Asymetric_Cipher
         }
         void ReceiveMessage()   // Nhận tin
         {
-            byte[] buffer = new byte[1024 * 5];
+            byte[] buffer = new byte[1024 * 6];
             int bytesRead;
             String plainText = "";
             while (true)
@@ -128,8 +132,11 @@ namespace The_Application_Of_Asymetric_Cipher
                     bytesRead = stream.Read(buffer, 0, buffer.Length);
                     if (bytesRead == 0) break;
                     string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    if (message.Contains("New client connected from 127.0.0.1"))
+        // Nếu gói tin được gửi đến bao gồm kết nối từ Client mới hoặc gửi khóa cho Client hiện tại
+                    if (message.Contains("New client connected from 127.0.0.1")
+                        || message.Contains("Send key for 127.0.0.1"))
                     {
+                        // Tiến hành lưu trữ
                         var posLineBreak = message.IndexOf('\n');
                         var posColon = message.IndexOf(':');
                         var port = int.Parse(message.Substring(posColon + 1, posLineBreak - posColon - 1));
@@ -137,23 +144,16 @@ namespace The_Application_Of_Asymetric_Cipher
                         if (!clients.Contains(new KeyTCPClient(port, rsaPa)))
                             clients.Add(new KeyTCPClient(port, rsaPa));
                         Array.Clear(buffer);
-                        //Gửi khóa của Client này cho Client mới vào
-                        var sendKeyMessage = "Send key for 127.0.0.1:" + port.ToString() + "\n";
-                        var flag = Encoding.UTF8.GetBytes(sendKeyMessage);
-                        var keyByte = Encoding.UTF8.GetBytes(publicKey);
-                        flag.CopyTo(buffer, 0);
-                        keyByte.CopyTo(buffer, flag.Length);
-                        stream.Write(buffer, 0, buffer.Length);
+                        //Vì Server không lưu khóa nên phải gửi khóa của Client này cho Client mới vào
+                        if (message.Contains("New client connected from 127.0.0.1"))
+                        {
+                            var sendKeyMessage = "Send key for 127.0.0.1:" + port.ToString() + "\n" + publicKey;
+                            var keyByte = Encoding.UTF8.GetBytes(sendKeyMessage);
+                            keyByte.CopyTo(buffer, 0);
+                            stream.Write(buffer, 0, buffer.Length);
+                        }
                     }
-                    else if (message.Contains("Send key for 127.0.0.1"))
-                    {
-                        var posLineBreak = message.IndexOf('\n');
-                        var posColon = message.IndexOf(':');
-                        var port = int.Parse(message.Substring(posColon + 1, posLineBreak - posColon - 1));
-                        var rsaPa = StringToKey(message.Substring(posLineBreak + 1));
-                        if (!clients.Contains(new KeyTCPClient(port, rsaPa)))
-                            clients.Add(new KeyTCPClient(port, rsaPa));
-                    }
+        //  Nếu gói tin là tin nhắn bình thường thì tiến hành giải mã và thêm vào khung chat
                     else
                     {
                         foreach (var item in clients)
@@ -176,7 +176,11 @@ namespace The_Application_Of_Asymetric_Cipher
             }
         }
 
-        private void btSend_Click(object sender, EventArgs e) { SendMessage(); }
+        private void btSend_Click(object sender, EventArgs e) 
+        {
+            if (textMessage.Text != "")
+                SendMessage();
+        }
         private void btn_Join_Click(object sender, EventArgs e)
         {
             if (textName.Text == String.Empty)
@@ -219,28 +223,18 @@ namespace The_Application_Of_Asymetric_Cipher
             return Encoding.UTF8.GetString(plainText);
         }
 
-        private string KeytoString(RSAParameters key)
+        private string KeytoString(RSAParameters key)   // Chuyển từ khóa sang chuỗi
         {
             var sw = new StringWriter();
             var xs = new XmlSerializer(typeof(RSAParameters));
             xs.Serialize(sw, key);
             return sw.ToString();
         }
-        private RSAParameters StringToKey(string keyString)
+        private RSAParameters StringToKey(string keyString) // Chuỗi từ chuỗi sang khóa
         {
             var xs = new XmlSerializer(typeof(RSAParameters));
             var key = (RSAParameters)xs.Deserialize(new StringReader(keyString));
             return key;
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            string s = "";
-            foreach (var item in clients)
-            {
-                s += KeytoString(item.rsa) + "\n";
-            }
-            MessageBox.Show("");
         }
     }
 }

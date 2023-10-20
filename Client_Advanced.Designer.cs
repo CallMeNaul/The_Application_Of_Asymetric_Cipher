@@ -42,7 +42,6 @@
             grb_Chat = new GroupBox();
             grb_Message = new GroupBox();
             panel_ChatBar = new Panel();
-            button1 = new Button();
             grb_Login.SuspendLayout();
             panel_Login.SuspendLayout();
             panel_Top_Login.SuspendLayout();
@@ -226,23 +225,12 @@
             panel_ChatBar.Size = new Size(992, 32);
             panel_ChatBar.TabIndex = 16;
             // 
-            // button1
-            // 
-            button1.Location = new Point(513, 32);
-            button1.Name = "button1";
-            button1.Size = new Size(94, 29);
-            button1.TabIndex = 17;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
-            // 
             // Client_Advanced
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.MidnightBlue;
             ClientSize = new Size(1081, 748);
-            Controls.Add(button1);
             Controls.Add(panel_Login);
             Controls.Add(panel_Chat);
             Name = "Client_Advanced";
@@ -278,6 +266,5 @@
         private GroupBox grb_Chat;
         private GroupBox grb_Message;
         private Panel panel_ChatBar;
-        private Button button1;
     }
 }

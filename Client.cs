@@ -126,7 +126,11 @@ namespace The_Application_Of_Asymetric_Cipher
 
         private void Client_FormClosed(object sender, FormClosedEventArgs e) { DisconnectFrom(); }
 
-        private void btSend_Click(object sender, EventArgs e) { SendMessage(); }
+        private void btSend_Click(object sender, EventArgs e) 
+        {
+            if(textMessage.Text != "")
+                SendMessage();
+        }
 
         private void btn_Join_Click(object sender, EventArgs e)
         {

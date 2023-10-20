@@ -16,7 +16,9 @@ namespace The_Application_Of_Asymetric_Cipher
 {
     public partial class Server_Advanced : Form
     {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public Server_Advanced()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
@@ -96,9 +98,8 @@ namespace The_Application_Of_Asymetric_Cipher
         }
         void HandleClientMessages(TcpClient client) // Nhận dữ liệu từ Client.
         {
-            byte[] buffer = new byte[1024 * 5];
+            byte[] buffer = new byte[1024 * 6];
             int bytesRead;
-            String plainText = "";
             while (true)
             {
                 try
@@ -111,14 +112,12 @@ namespace The_Application_Of_Asymetric_Cipher
                         break;
                     }
                     string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    // Nếu dữ liệu gửi tới là khóa công khai thì gửi broadcast cho các Client còn lại.
+                    // Nếu dữ liệu gửi tới là khóa công khai của Client mới thì gửi broadcast cho các Client còn lại.
                     if (message.Contains("New client connected from 127.0.0.1"))
                     {
                         var posLineBreak = message.IndexOf('\n');
                         IPEndPoint iP = (IPEndPoint)client.Client.RemoteEndPoint;
                         var connectMessage = $"{message.Substring(0, posLineBreak)}{":"}{iP.Port.ToString()}";
-                        //var string_rsaPa = message.Substring(posLineBreak + 1);
-                        //rsaPa = StringToKey(string_rsaPa);
                         foreach (var cli in clients)
                         {
                             if (client == cli.tcpClient)
@@ -129,7 +128,8 @@ namespace The_Application_Of_Asymetric_Cipher
                         BroadcastMessage(message.Replace(message.Substring(0, posLineBreak), connectMessage), client);
                         AddMessageToChatWindow("New client connected from " + client.Client.RemoteEndPoint.ToString(), 2);
                     }
-                    else if(message.Contains("Send key for 127.0.0.1"))
+                    // Nếu dữ liệu gửi tới là khóa công khai của Client cũ thì gửi cho Client mới
+                    else if (message.Contains("Send key for 127.0.0.1"))
                     {
                         var posLineBreak = message.IndexOf('\n');
                         var posColon = message.IndexOf(':');
@@ -186,12 +186,6 @@ namespace The_Application_Of_Asymetric_Cipher
             csp.ImportParameters(key);
             var plainText = csp.Decrypt(buffer, false);
             return Encoding.UTF8.GetString(plainText);
-        }
-        private RSAParameters StringToKey(string keyString)
-        {
-            var xs = new XmlSerializer(typeof(RSAParameters));
-            var key = (RSAParameters)xs.Deserialize(new StringReader(keyString));
-            return key;
         }
 
         private void Server_Advanced_FormClosed(object sender, FormClosedEventArgs e)
