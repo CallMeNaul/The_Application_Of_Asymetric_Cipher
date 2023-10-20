@@ -83,6 +83,46 @@ namespace The_Application_Of_Asymetric_Cipher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap crossx_removebg_preview {
+            get {
+                object obj = ResourceManager.GetObject("crossx-removebg-preview", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap GROUPCARD10 {
+            get {
+                object obj = ResourceManager.GetObject("GROUPCARD10", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap NAMECARD_16 {
+            get {
+                object obj = ResourceManager.GetObject("NAMECARD 16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Scrapbook_Cover {
+            get {
+                object obj = ResourceManager.GetObject("Scrapbook Cover", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap sv_off_removebg_preview {
             get {
                 object obj = ResourceManager.GetObject("sv_off-removebg-preview", resourceCulture);

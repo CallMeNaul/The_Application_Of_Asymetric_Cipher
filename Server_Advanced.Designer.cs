@@ -56,10 +56,11 @@
             // 
             // grb_Message
             // 
+            grb_Message.BackgroundImage = Properties.Resources.NAMECARD_16;
             grb_Message.Controls.Add(panel_Top);
             grb_Message.Dock = DockStyle.Fill;
             grb_Message.Font = new Font("Monotype Corsiva", 13.8F, FontStyle.Italic, GraphicsUnit.Point);
-            grb_Message.ForeColor = Color.Cyan;
+            grb_Message.ForeColor = Color.Black;
             grb_Message.Location = new Point(0, 0);
             grb_Message.Name = "grb_Message";
             grb_Message.Size = new Size(800, 485);
@@ -96,10 +97,11 @@
             // 
             // grb_Notification
             // 
+            grb_Notification.BackgroundImage = Properties.Resources.NAMECARD_16;
             grb_Notification.Controls.Add(textNote);
             grb_Notification.Dock = DockStyle.Fill;
             grb_Notification.Font = new Font("Monotype Corsiva", 13.8F, FontStyle.Italic, GraphicsUnit.Point);
-            grb_Notification.ForeColor = Color.Cyan;
+            grb_Notification.ForeColor = Color.Black;
             grb_Notification.Location = new Point(0, 0);
             grb_Notification.Name = "grb_Notification";
             grb_Notification.Size = new Size(800, 155);

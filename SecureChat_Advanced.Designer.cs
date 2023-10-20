@@ -39,6 +39,7 @@
             panel_icon_sv = new Panel();
             panel_icon_sv_off = new Panel();
             panel_Top_Button = new Panel();
+            label2 = new Label();
             panel_Column = new Panel();
             panel_All = new Panel();
             panel_Bottom_Button.SuspendLayout();
@@ -46,6 +47,7 @@
             panel_Left_Pillar.SuspendLayout();
             panel_icon_cli.SuspendLayout();
             panel_icon_sv.SuspendLayout();
+            panel_Top_Button.SuspendLayout();
             panel_Column.SuspendLayout();
             panel_All.SuspendLayout();
             SuspendLayout();
@@ -53,6 +55,8 @@
             // panel_Body
             // 
             panel_Body.BackColor = Color.MidnightBlue;
+            panel_Body.BackgroundImage = Properties.Resources.NAMECARD_16;
+            panel_Body.BackgroundImageLayout = ImageLayout.Stretch;
             panel_Body.Dock = DockStyle.Fill;
             panel_Body.Location = new Point(0, 0);
             panel_Body.Name = "panel_Body";
@@ -75,6 +79,8 @@
             btn_Client.TextAlign = ContentAlignment.MiddleLeft;
             btn_Client.UseVisualStyleBackColor = false;
             btn_Client.Click += btn_Client_Click;
+            btn_Client.MouseEnter += btn_Client_MouseEnter;
+            btn_Client.MouseLeave += btn_Client_MouseLeave;
             // 
             // btn_Server
             // 
@@ -92,6 +98,8 @@
             btn_Server.TextAlign = ContentAlignment.MiddleLeft;
             btn_Server.UseVisualStyleBackColor = false;
             btn_Server.Click += btn_Server_Click;
+            btn_Server.MouseEnter += btn_Server_MouseEnter;
+            btn_Server.MouseLeave += btn_Server_MouseLeave;
             // 
             // panel_Bottom_Button
             // 
@@ -131,6 +139,8 @@
             panel_icon_cli.Size = new Size(46, 220);
             panel_icon_cli.TabIndex = 5;
             panel_icon_cli.Click += panel_icon_cli_Click;
+            panel_icon_cli.MouseEnter += panel_icon_cli_MouseEnter;
+            panel_icon_cli.MouseLeave += panel_icon_cli_MouseLeave;
             // 
             // panel_icon_cl_off
             // 
@@ -153,6 +163,8 @@
             panel_icon_sv.Size = new Size(46, 220);
             panel_icon_sv.TabIndex = 6;
             panel_icon_sv.Click += panel_icon_sv_Click;
+            panel_icon_sv.MouseEnter += panel_icon_sv_MouseEnter;
+            panel_icon_sv.MouseLeave += panel_icon_sv_MouseLeave;
             // 
             // panel_icon_sv_off
             // 
@@ -166,11 +178,23 @@
             // 
             // panel_Top_Button
             // 
+            panel_Top_Button.Controls.Add(label2);
             panel_Top_Button.Dock = DockStyle.Top;
             panel_Top_Button.Location = new Point(0, 0);
             panel_Top_Button.Name = "panel_Top_Button";
             panel_Top_Button.Size = new Size(214, 104);
             panel_Top_Button.TabIndex = 3;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Monotype Corsiva", 28.2F, FontStyle.Italic, GraphicsUnit.Point);
+            label2.ForeColor = SystemColors.Window;
+            label2.Location = new Point(18, 24);
+            label2.Name = "label2";
+            label2.Size = new Size(178, 56);
+            label2.TabIndex = 1;
+            label2.Text = "Nhóm 10";
             // 
             // panel_Column
             // 
@@ -206,6 +230,8 @@
             panel_Left_Pillar.ResumeLayout(false);
             panel_icon_cli.ResumeLayout(false);
             panel_icon_sv.ResumeLayout(false);
+            panel_Top_Button.ResumeLayout(false);
+            panel_Top_Button.PerformLayout();
             panel_Column.ResumeLayout(false);
             panel_All.ResumeLayout(false);
             ResumeLayout(false);
@@ -226,5 +252,6 @@
         private Panel panel_Top_Button;
         private Panel panel_Column;
         private Panel panel_All;
+        private Label label2;
     }
 }

@@ -143,7 +143,7 @@ namespace The_Application_Of_Asymetric_Cipher
                                 netStream.Write(buffer, 0, buffer.Length);
                             }
                         }
-                    }    
+                    }
                     else   // Nếu dữ liệu được gửi đến là tin nhắn, tiến hành broadcast
                     {
                         AddMessageToChatWindow(message, 1);

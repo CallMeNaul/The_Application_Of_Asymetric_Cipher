@@ -132,7 +132,7 @@ namespace The_Application_Of_Asymetric_Cipher
                     bytesRead = stream.Read(buffer, 0, buffer.Length);
                     if (bytesRead == 0) break;
                     string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-        // Nếu gói tin được gửi đến bao gồm kết nối từ Client mới hoặc gửi khóa cho Client hiện tại
+                    // Nếu gói tin được gửi đến bao gồm kết nối từ Client mới hoặc gửi khóa cho Client hiện tại
                     if (message.Contains("New client connected from 127.0.0.1")
                         || message.Contains("Send key for 127.0.0.1"))
                     {
@@ -153,7 +153,7 @@ namespace The_Application_Of_Asymetric_Cipher
                             stream.Write(buffer, 0, buffer.Length);
                         }
                     }
-        //  Nếu gói tin là tin nhắn bình thường thì tiến hành giải mã và thêm vào khung chat
+                    //  Nếu gói tin là tin nhắn bình thường thì tiến hành giải mã và thêm vào khung chat
                     else
                     {
                         foreach (var item in clients)
@@ -176,7 +176,7 @@ namespace The_Application_Of_Asymetric_Cipher
             }
         }
 
-        private void btSend_Click(object sender, EventArgs e) 
+        private void btSend_Click(object sender, EventArgs e)
         {
             if (textMessage.Text != "")
                 SendMessage();

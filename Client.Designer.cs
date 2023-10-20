@@ -63,7 +63,7 @@
             textDisplayMessage.Multiline = true;
             textDisplayMessage.Name = "textDisplayMessage";
             textDisplayMessage.ScrollBars = ScrollBars.Vertical;
-            textDisplayMessage.Size = new Size(984, 430);
+            textDisplayMessage.Size = new Size(984, 422);
             textDisplayMessage.TabIndex = 9;
             // 
             // textMessage
@@ -191,7 +191,7 @@
             grb_Chat.Controls.Add(grb_Message);
             grb_Chat.Controls.Add(panel_Type);
             grb_Chat.Dock = DockStyle.Fill;
-            grb_Chat.Font = new Font("Monotype Corsiva", 12F, FontStyle.Italic, GraphicsUnit.Point);
+            grb_Chat.Font = new Font("Monotype Corsiva", 16.2F, FontStyle.Italic, GraphicsUnit.Point);
             grb_Chat.ForeColor = Color.Cyan;
             grb_Chat.Location = new Point(0, 0);
             grb_Chat.Margin = new Padding(4);
@@ -207,11 +207,11 @@
             grb_Message.Dock = DockStyle.Fill;
             grb_Message.Font = new Font("Monotype Corsiva", 13.8F, FontStyle.Italic, GraphicsUnit.Point);
             grb_Message.ForeColor = Color.Cyan;
-            grb_Message.Location = new Point(4, 27);
+            grb_Message.Location = new Point(4, 35);
             grb_Message.Margin = new Padding(4);
             grb_Message.Name = "grb_Message";
             grb_Message.Padding = new Padding(4);
-            grb_Message.Size = new Size(992, 464);
+            grb_Message.Size = new Size(992, 456);
             grb_Message.TabIndex = 10;
             grb_Message.TabStop = false;
             grb_Message.Text = "Message";

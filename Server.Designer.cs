@@ -46,6 +46,7 @@
             // 
             // textMessage
             // 
+            textMessage.BackColor = SystemColors.Window;
             textMessage.Dock = DockStyle.Fill;
             textMessage.Location = new Point(0, 0);
             textMessage.Multiline = true;
@@ -56,10 +57,11 @@
             // 
             // grb_Message
             // 
+            grb_Message.BackgroundImage = Properties.Resources.NAMECARD_16;
             grb_Message.Controls.Add(panel_Top);
             grb_Message.Dock = DockStyle.Fill;
             grb_Message.Font = new Font("Monotype Corsiva", 13.8F, FontStyle.Italic, GraphicsUnit.Point);
-            grb_Message.ForeColor = Color.Cyan;
+            grb_Message.ForeColor = Color.Black;
             grb_Message.Location = new Point(0, 0);
             grb_Message.Name = "grb_Message";
             grb_Message.Size = new Size(800, 640);
@@ -96,10 +98,12 @@
             // 
             // grb_Notification
             // 
+            grb_Notification.BackgroundImage = Properties.Resources.NAMECARD_16;
             grb_Notification.Controls.Add(textNote);
             grb_Notification.Dock = DockStyle.Fill;
+            grb_Notification.FlatStyle = FlatStyle.Flat;
             grb_Notification.Font = new Font("Monotype Corsiva", 13.8F, FontStyle.Italic, GraphicsUnit.Point);
-            grb_Notification.ForeColor = Color.Cyan;
+            grb_Notification.ForeColor = Color.Black;
             grb_Notification.Location = new Point(0, 0);
             grb_Notification.Name = "grb_Notification";
             grb_Notification.Size = new Size(800, 155);
@@ -120,6 +124,7 @@
             // panel_Server
             // 
             panel_Server.BackColor = Color.MidnightBlue;
+            panel_Server.BackgroundImage = Properties.Resources.NAMECARD_16;
             panel_Server.Controls.Add(panel_Monitor);
             panel_Server.Controls.Add(grb_Message);
             panel_Server.Dock = DockStyle.Fill;
