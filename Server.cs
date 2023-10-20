@@ -77,20 +77,23 @@ namespace The_Application_Of_Asymetric_Cipher
                     clients.Add(keyTcpCli);
                     Task.Run(() => HandleClientMessages(client));
                 }
-                catch
-                {
-
-                }
+                catch { }
             }
         }
-
+        void AddMessageToChatWindow(string message, int temp) // Thêm tin vào khung chat
+        {
+            this.Invoke((MethodInvoker)delegate
+            {
+                if (temp == 1)
+                    textMessage.AppendText($"{message}{Environment.NewLine}");
+                else if (temp == 2)
+                    textNote.AppendText($"{message}{Environment.NewLine}");
+            });
+        }
         KeyTCPClient GetKeyTCPClientFromTCPClient(TcpClient cli)    //Hàm để trả về đối tượng của danh sách các Client
         {
             foreach (var client in clients)
-            {
-                if (client.tcpClient == cli)
-                    return client;
-            }
+                if (client.tcpClient == cli) return client;
             return null;
         }
         void HandleClientMessages(TcpClient client) // Nhận dữ liệu từ Client.
@@ -106,10 +109,7 @@ namespace The_Application_Of_Asymetric_Cipher
                     bytesRead = stream.Read(buffer, 0, buffer.Length);
                     if (bytesRead == 0)
                     {
-                        this.Invoke((MethodInvoker)delegate
-                        {
-                            textNote.AppendText("Disconnected from " + client.Client.RemoteEndPoint.ToString() + Environment.NewLine);
-                        });
+                        AddMessageToChatWindow("Disconnected from " + client.Client.RemoteEndPoint.ToString(), 2);
                         break;
                     }
                     string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
@@ -128,18 +128,12 @@ namespace The_Application_Of_Asymetric_Cipher
                                 cli.port = iP.Port;
                             }
                         }
-                        this.Invoke((MethodInvoker)delegate
-                        {
-                            textNote.AppendText("New client connected from " + client.Client.RemoteEndPoint.ToString() + Environment.NewLine);
-                        });
+                        AddMessageToChatWindow("New client connected from " + client.Client.RemoteEndPoint.ToString(), 2);
                     }
                     else   // Nếu dữ liệu được gửi đến là tin nhắn, tiến hành broadcast
                     {
                         plainText = RSADecrypt(message, GetKeyTCPClientFromTCPClient(client).publicKey);
-                        this.Invoke((MethodInvoker)delegate
-                        {
-                            textMessage.AppendText(plainText + Environment.NewLine);
-                        });
+                        AddMessageToChatWindow(plainText, 1);
                         BroadcastMessage(plainText, client);
                     }
                 }
@@ -189,7 +183,7 @@ namespace The_Application_Of_Asymetric_Cipher
             var plainText = csp.Decrypt(buffer, false);
             return Encoding.UTF8.GetString(plainText);
         }
-        private RSAParameters StringToKey(string keyString)
+        private RSAParameters StringToKey(string keyString) // Chuyển từ chuỗi sang khóa
         {
             var xs = new XmlSerializer(typeof(RSAParameters));
             var key = (RSAParameters)xs.Deserialize(new StringReader(keyString));

@@ -80,10 +80,8 @@ namespace The_Application_Of_Asymetric_Cipher
 
         void DisconnectFrom() // Ngắt kết nối
         {
-            if (client != null)
-                client.Close();
-            if (stream != null)
-                stream.Close();
+            if (client != null) client.Close();
+            if (stream != null) stream.Close();
         }
 
         void SendMessage()  // Gửi tin nhắn
