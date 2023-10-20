@@ -1,6 +1,6 @@
 ﻿namespace The_Application_Of_Asymetric_Cipher
 {
-    partial class Client
+    partial class Client_Advanced
     {
         /// <summary>
         /// Required designer variable.
@@ -41,8 +41,8 @@
             panel_Chat = new Panel();
             grb_Chat = new GroupBox();
             grb_Message = new GroupBox();
-            panel_Type = new Panel();
             panel_ChatBar = new Panel();
+            button1 = new Button();
             grb_Login.SuspendLayout();
             panel_Login.SuspendLayout();
             panel_Top_Login.SuspendLayout();
@@ -50,7 +50,6 @@
             panel_Chat.SuspendLayout();
             grb_Chat.SuspendLayout();
             grb_Message.SuspendLayout();
-            panel_Type.SuspendLayout();
             panel_ChatBar.SuspendLayout();
             SuspendLayout();
             // 
@@ -63,7 +62,7 @@
             textDisplayMessage.Multiline = true;
             textDisplayMessage.Name = "textDisplayMessage";
             textDisplayMessage.ScrollBars = ScrollBars.Vertical;
-            textDisplayMessage.Size = new Size(984, 430);
+            textDisplayMessage.Size = new Size(984, 439);
             textDisplayMessage.TabIndex = 9;
             // 
             // textMessage
@@ -75,14 +74,14 @@
             textMessage.Multiline = true;
             textMessage.Name = "textMessage";
             textMessage.PlaceholderText = "Type text";
-            textMessage.Size = new Size(852, 41);
+            textMessage.Size = new Size(852, 32);
             textMessage.TabIndex = 8;
             // 
             // textName
             // 
-            textName.Dock = DockStyle.Bottom;
+            textName.Dock = DockStyle.Fill;
             textName.Font = new Font("Monotype Corsiva", 12F, FontStyle.Italic, GraphicsUnit.Point);
-            textName.Location = new Point(4, 66);
+            textName.Location = new Point(4, 57);
             textName.Margin = new Padding(4);
             textName.Name = "textName";
             textName.Size = new Size(392, 30);
@@ -96,7 +95,7 @@
             btSend.Location = new Point(852, 0);
             btSend.Margin = new Padding(4);
             btSend.Name = "btSend";
-            btSend.Size = new Size(140, 41);
+            btSend.Size = new Size(140, 32);
             btSend.TabIndex = 6;
             btSend.Text = "Send";
             btSend.UseVisualStyleBackColor = true;
@@ -113,7 +112,7 @@
             grb_Login.Margin = new Padding(4);
             grb_Login.Name = "grb_Login";
             grb_Login.Padding = new Padding(4);
-            grb_Login.Size = new Size(400, 100);
+            grb_Login.Size = new Size(400, 101);
             grb_Login.TabIndex = 12;
             grb_Login.TabStop = false;
             grb_Login.Text = "Chat in LAN";
@@ -139,7 +138,7 @@
             btn_Join.Location = new Point(282, 0);
             btn_Join.Margin = new Padding(4);
             btn_Join.Name = "btn_Join";
-            btn_Join.Size = new Size(118, 35);
+            btn_Join.Size = new Size(118, 39);
             btn_Join.TabIndex = 9;
             btn_Join.Text = "Login";
             btn_Join.UseVisualStyleBackColor = true;
@@ -149,47 +148,47 @@
             // 
             panel_Login.Controls.Add(panel_Top_Login);
             panel_Login.Font = new Font("Monotype Corsiva", 12F, FontStyle.Italic, GraphicsUnit.Point);
-            panel_Login.Location = new Point(36, 41);
+            panel_Login.Location = new Point(31, 35);
             panel_Login.Margin = new Padding(4);
             panel_Login.Name = "panel_Login";
             panel_Login.Size = new Size(400, 148);
-            panel_Login.TabIndex = 13;
+            panel_Login.TabIndex = 15;
             // 
             // panel_Top_Login
             // 
-            panel_Top_Login.Controls.Add(grb_Login);
             panel_Top_Login.Controls.Add(panel_btn_Join);
+            panel_Top_Login.Controls.Add(grb_Login);
             panel_Top_Login.Dock = DockStyle.Top;
             panel_Top_Login.Location = new Point(0, 0);
             panel_Top_Login.Margin = new Padding(4);
             panel_Top_Login.Name = "panel_Top_Login";
-            panel_Top_Login.Size = new Size(400, 140);
+            panel_Top_Login.Size = new Size(400, 146);
             panel_Top_Login.TabIndex = 0;
             // 
             // panel_btn_Join
             // 
             panel_btn_Join.Controls.Add(btn_Join);
             panel_btn_Join.Dock = DockStyle.Bottom;
-            panel_btn_Join.Location = new Point(0, 105);
+            panel_btn_Join.Location = new Point(0, 107);
             panel_btn_Join.Margin = new Padding(4);
             panel_btn_Join.Name = "panel_btn_Join";
-            panel_btn_Join.Size = new Size(400, 35);
+            panel_btn_Join.Size = new Size(400, 39);
             panel_btn_Join.TabIndex = 16;
             // 
             // panel_Chat
             // 
             panel_Chat.Controls.Add(grb_Chat);
             panel_Chat.Font = new Font("Monotype Corsiva", 12F, FontStyle.Italic, GraphicsUnit.Point);
-            panel_Chat.Location = new Point(15, 244);
+            panel_Chat.Location = new Point(40, 211);
             panel_Chat.Margin = new Padding(4);
             panel_Chat.Name = "panel_Chat";
             panel_Chat.Size = new Size(1000, 536);
-            panel_Chat.TabIndex = 14;
+            panel_Chat.TabIndex = 16;
             // 
             // grb_Chat
             // 
             grb_Chat.Controls.Add(grb_Message);
-            grb_Chat.Controls.Add(panel_Type);
+            grb_Chat.Controls.Add(panel_ChatBar);
             grb_Chat.Dock = DockStyle.Fill;
             grb_Chat.Font = new Font("Monotype Corsiva", 12F, FontStyle.Italic, GraphicsUnit.Point);
             grb_Chat.ForeColor = Color.Cyan;
@@ -211,46 +210,44 @@
             grb_Message.Margin = new Padding(4);
             grb_Message.Name = "grb_Message";
             grb_Message.Padding = new Padding(4);
-            grb_Message.Size = new Size(992, 464);
+            grb_Message.Size = new Size(992, 473);
             grb_Message.TabIndex = 10;
             grb_Message.TabStop = false;
             grb_Message.Text = "Message";
             // 
-            // panel_Type
-            // 
-            panel_Type.Controls.Add(panel_ChatBar);
-            panel_Type.Controls.Add(btSend);
-            panel_Type.Dock = DockStyle.Bottom;
-            panel_Type.Location = new Point(4, 491);
-            panel_Type.Margin = new Padding(4);
-            panel_Type.Name = "panel_Type";
-            panel_Type.Size = new Size(992, 41);
-            panel_Type.TabIndex = 15;
-            // 
             // panel_ChatBar
             // 
             panel_ChatBar.Controls.Add(textMessage);
-            panel_ChatBar.Dock = DockStyle.Fill;
-            panel_ChatBar.Location = new Point(0, 0);
+            panel_ChatBar.Controls.Add(btSend);
+            panel_ChatBar.Dock = DockStyle.Bottom;
+            panel_ChatBar.Location = new Point(4, 500);
             panel_ChatBar.Margin = new Padding(4);
             panel_ChatBar.Name = "panel_ChatBar";
-            panel_ChatBar.Size = new Size(852, 41);
+            panel_ChatBar.Size = new Size(992, 32);
             panel_ChatBar.TabIndex = 16;
             // 
-            // Client
+            // button1
             // 
-            AutoScaleDimensions = new SizeF(10F, 24F);
+            button1.Location = new Point(513, 32);
+            button1.Name = "button1";
+            button1.Size = new Size(94, 29);
+            button1.TabIndex = 17;
+            button1.Text = "button1";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
+            // Client_Advanced
+            // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.MidnightBlue;
-            ClientSize = new Size(1052, 786);
-            Controls.Add(panel_Chat);
+            ClientSize = new Size(1081, 748);
+            Controls.Add(button1);
             Controls.Add(panel_Login);
-            Font = new Font("Monotype Corsiva", 12F, FontStyle.Italic, GraphicsUnit.Point);
-            ForeColor = Color.Cyan;
-            Margin = new Padding(4);
-            Name = "Client";
-            Text = "Client";
-            FormClosed += Client_FormClosed;
+            Controls.Add(panel_Chat);
+            Name = "Client_Advanced";
+            Text = "Client_Advanced";
+            FormClosed += Client_Advanced_FormClosed;
             grb_Login.ResumeLayout(false);
             grb_Login.PerformLayout();
             panel_Login.ResumeLayout(false);
@@ -260,7 +257,6 @@
             grb_Chat.ResumeLayout(false);
             grb_Message.ResumeLayout(false);
             grb_Message.PerformLayout();
-            panel_Type.ResumeLayout(false);
             panel_ChatBar.ResumeLayout(false);
             panel_ChatBar.PerformLayout();
             ResumeLayout(false);
@@ -274,14 +270,14 @@
         private Button btSend;
         private GroupBox grb_Login;
         private Label label3;
-        private Panel panel_Login;
         private Button btn_Join;
+        private Panel panel_Login;
+        private Panel panel_Top_Login;
+        private Panel panel_btn_Join;
         private Panel panel_Chat;
         private GroupBox grb_Chat;
         private GroupBox grb_Message;
-        private Panel panel_Type;
         private Panel panel_ChatBar;
-        private Panel panel_Top_Login;
-        private Panel panel_btn_Join;
+        private Button button1;
     }
 }

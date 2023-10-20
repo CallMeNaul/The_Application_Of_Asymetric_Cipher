@@ -4,11 +4,9 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Net.Sockets;
+using System.Net;
 using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -16,11 +14,9 @@ using System.Xml.Serialization;
 
 namespace The_Application_Of_Asymetric_Cipher
 {
-    public partial class Server : Form
+    public partial class Server_Advanced : Form
     {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public Server()
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public Server_Advanced()
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
@@ -40,12 +36,10 @@ namespace The_Application_Of_Asymetric_Cipher
         public class KeyTCPClient
         {
             public TcpClient tcpClient { get; set; }
-            public RSAParameters publicKey { get; set; }
             public int port;
-            public KeyTCPClient(TcpClient tCli, RSAParameters key, int p)
+            public KeyTCPClient(TcpClient tCli, int p)
             {
                 this.tcpClient = tCli;
-                this.publicKey = key;
                 this.port = p;
             }
         }
@@ -73,15 +67,22 @@ namespace The_Application_Of_Asymetric_Cipher
                 try
                 {
                     client = server.AcceptTcpClient();
-                    KeyTCPClient keyTcpCli = new KeyTCPClient(client, rsaPa, 0);
+                    KeyTCPClient keyTcpCli = new KeyTCPClient(client, 0);
                     clients.Add(keyTcpCli);
                     Task.Run(() => HandleClientMessages(client));
                 }
-                catch
-                {
-
-                }
+                catch { }
             }
+        }
+        void AddMessageToChatWindow(string message, int temp) // Thêm tin vào khung chat
+        {
+            this.Invoke((MethodInvoker)delegate
+            {
+                if (temp == 1)
+                    textMessage.AppendText($"{message}{Environment.NewLine}");
+                else if (temp == 2)
+                    textNote.AppendText($"{message}{Environment.NewLine}");
+            });
         }
 
         KeyTCPClient GetKeyTCPClientFromTCPClient(TcpClient cli)    //Hàm để trả về đối tượng của danh sách các Client
@@ -95,7 +96,7 @@ namespace The_Application_Of_Asymetric_Cipher
         }
         void HandleClientMessages(TcpClient client) // Nhận dữ liệu từ Client.
         {
-            byte[] buffer = new byte[1024 * 4];
+            byte[] buffer = new byte[1024 * 5];
             int bytesRead;
             String plainText = "";
             while (true)
@@ -106,41 +107,47 @@ namespace The_Application_Of_Asymetric_Cipher
                     bytesRead = stream.Read(buffer, 0, buffer.Length);
                     if (bytesRead == 0)
                     {
-                        this.Invoke((MethodInvoker)delegate
-                        {
-                            textNote.AppendText("Disconnected from " + client.Client.RemoteEndPoint.ToString() + Environment.NewLine);
-                        });
+                        AddMessageToChatWindow("Disconnected from " + client.Client.RemoteEndPoint.ToString(), 2);
                         break;
                     }
                     string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    // Nếu dữ liệu gửi tới là khóa công khai, tiến hành lưu trữ.
+                    // Nếu dữ liệu gửi tới là khóa công khai thì gửi broadcast cho các Client còn lại.
                     if (message.Contains("New client connected from 127.0.0.1"))
                     {
                         var posLineBreak = message.IndexOf('\n');
                         IPEndPoint iP = (IPEndPoint)client.Client.RemoteEndPoint;
-                        var string_rsaPa = message.Substring(posLineBreak + 1);
-                        rsaPa = StringToKey(string_rsaPa);
+                        var connectMessage = $"{message.Substring(0, posLineBreak)}{":"}{iP.Port.ToString()}";
+                        //var string_rsaPa = message.Substring(posLineBreak + 1);
+                        //rsaPa = StringToKey(string_rsaPa);
                         foreach (var cli in clients)
                         {
                             if (client == cli.tcpClient)
                             {
-                                cli.publicKey = rsaPa;
                                 cli.port = iP.Port;
                             }
                         }
-                        this.Invoke((MethodInvoker)delegate
-                        {
-                            textNote.AppendText("New client connected from " + client.Client.RemoteEndPoint.ToString() + Environment.NewLine);
-                        });
+                        BroadcastMessage(message.Replace(message.Substring(0, posLineBreak), connectMessage), client);
+                        AddMessageToChatWindow("New client connected from " + client.Client.RemoteEndPoint.ToString(), 2);
                     }
+                    else if(message.Contains("Send key for 127.0.0.1"))
+                    {
+                        var posLineBreak = message.IndexOf('\n');
+                        var posColon = message.IndexOf(':');
+                        var receiverPort = int.Parse(message.Substring(posColon + 1, posLineBreak - posColon - 1));
+                        foreach (var cli in clients)
+                        {
+                            if (receiverPort == cli.port)
+                            {
+                                buffer = Encoding.UTF8.GetBytes(message);
+                                NetworkStream netStream = cli.tcpClient.GetStream();
+                                netStream.Write(buffer, 0, buffer.Length);
+                            }
+                        }
+                    }    
                     else   // Nếu dữ liệu được gửi đến là tin nhắn, tiến hành broadcast
                     {
-                        plainText = RSADecrypt(message, GetKeyTCPClientFromTCPClient(client).publicKey);
-                        this.Invoke((MethodInvoker)delegate
-                        {
-                            textMessage.AppendText(plainText + Environment.NewLine);
-                        });
-                        BroadcastMessage(plainText, client);
+                        AddMessageToChatWindow(message, 1);
+                        BroadcastMessage(message, client);
                     }
                 }
                 catch { break; }
@@ -149,28 +156,19 @@ namespace The_Application_Of_Asymetric_Cipher
 
         void BroadcastMessage(string message, TcpClient sender) // Broadcast tin nhắn
         {
-            String cipherText;
-            byte[] buffer;
+            byte[] buffer = Encoding.UTF8.GetBytes(message);
             foreach (KeyTCPClient receiver in clients)
             {
                 try
                 {
                     if (receiver.tcpClient != sender)
                     {
-                        cipherText = RSAEncrypt(message, receiver.publicKey);
-                        buffer = Encoding.UTF8.GetBytes(cipherText);
                         NetworkStream netStream = receiver.tcpClient.GetStream();
                         netStream.Write(buffer, 0, buffer.Length);
                     }
                 }
-                catch (Exception) { }
+                catch { }
             }
-        }
-
-        private void Server_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            clients.Clear();
-            server.Stop();
         }
         public string RSAEncrypt(string plainText, RSAParameters key)   // Mã hóa thông tin để gửi đi
         {
@@ -194,6 +192,12 @@ namespace The_Application_Of_Asymetric_Cipher
             var xs = new XmlSerializer(typeof(RSAParameters));
             var key = (RSAParameters)xs.Deserialize(new StringReader(keyString));
             return key;
+        }
+
+        private void Server_Advanced_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            clients.Clear();
+            server.Stop();
         }
     }
 }

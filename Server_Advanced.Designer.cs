@@ -1,6 +1,6 @@
 ﻿namespace The_Application_Of_Asymetric_Cipher
 {
-    partial class Server
+    partial class Server_Advanced
     {
         /// <summary>
         /// Required designer variable.
@@ -51,7 +51,7 @@
             textMessage.Multiline = true;
             textMessage.Name = "textMessage";
             textMessage.ScrollBars = ScrollBars.Vertical;
-            textMessage.Size = new Size(794, 608);
+            textMessage.Size = new Size(794, 453);
             textMessage.TabIndex = 2;
             // 
             // grb_Message
@@ -62,7 +62,7 @@
             grb_Message.ForeColor = Color.Cyan;
             grb_Message.Location = new Point(0, 0);
             grb_Message.Name = "grb_Message";
-            grb_Message.Size = new Size(800, 640);
+            grb_Message.Size = new Size(800, 485);
             grb_Message.TabIndex = 4;
             grb_Message.TabStop = false;
             grb_Message.Text = "Message";
@@ -73,7 +73,7 @@
             panel_Top.Dock = DockStyle.Fill;
             panel_Top.Location = new Point(3, 29);
             panel_Top.Name = "panel_Top";
-            panel_Top.Size = new Size(794, 608);
+            panel_Top.Size = new Size(794, 453);
             panel_Top.TabIndex = 6;
             // 
             // panel_Monitor
@@ -120,23 +120,23 @@
             // panel_Server
             // 
             panel_Server.BackColor = Color.MidnightBlue;
-            panel_Server.Controls.Add(panel_Monitor);
             panel_Server.Controls.Add(grb_Message);
+            panel_Server.Controls.Add(panel_Monitor);
             panel_Server.Dock = DockStyle.Fill;
             panel_Server.Location = new Point(0, 0);
             panel_Server.Name = "panel_Server";
             panel_Server.Size = new Size(800, 640);
-            panel_Server.TabIndex = 7;
+            panel_Server.TabIndex = 8;
             // 
-            // Server
+            // Server_Advanced
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 640);
             Controls.Add(panel_Server);
-            Name = "Server";
-            Text = "Server";
-            FormClosed += Server_FormClosed;
+            Name = "Server_Advanced";
+            Text = "Server_Advanced";
+            FormClosed += Server_Advanced_FormClosed;
             grb_Message.ResumeLayout(false);
             panel_Top.ResumeLayout(false);
             panel_Top.PerformLayout();
@@ -149,13 +149,14 @@
         }
 
         #endregion
+
         private TextBox textMessage;
         private GroupBox grb_Message;
+        private Panel panel_Top;
+        private Panel panel_Monitor;
+        private Panel panel_Server;
+        private Panel panel_Notification;
         private GroupBox grb_Notification;
         private TextBox textNote;
-        private Panel panel_Server;
-        private Panel panel_Monitor;
-        private Panel panel_Notification;
-        private Panel panel_Top;
     }
 }
