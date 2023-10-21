@@ -71,10 +71,11 @@ namespace The_Application_Of_Asymetric_Cipher
                 keyByte.CopyTo(buffer, flag.Length);
                 stream.Write(buffer, 0, buffer.Length);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Disconnected from Server", "System Notification", MessageBoxButtons.OK);
-                client.Close();
+                MessageBox.Show(ex.Message);
+                this.Close();
+                return;
             }
         }
 
@@ -95,7 +96,7 @@ namespace The_Application_Of_Asymetric_Cipher
                 AddMessageToChatWindow(message);
                 textMessage.Text = String.Empty;
             }
-            catch { }
+            catch { return; }
         }
 
         void AddMessageToChatWindow(string message) // Thêm tin vào khung chat

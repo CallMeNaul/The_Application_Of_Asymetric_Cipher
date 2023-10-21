@@ -71,23 +71,21 @@ namespace The_Application_Of_Asymetric_Cipher
         {
             try
             {
-                client = new TcpClient("127.0.0.1", 8080);
+                client = new TcpClient("127.0.0.1", 8081);
                 stream = client.GetStream();
                 string message = "New client connected from 127.0.0.1 " + textName.Text + "\n" + publicKey;
                 Thread rec = new Thread(ReceiveMessage);
                 rec.IsBackground = true;
                 rec.Start();
-                //byte[] flag = Encoding.UTF8.GetBytes(message);
-                //byte[] keyByte = Encoding.UTF8.GetBytes(publicKey);
-                //flag.CopyTo(buffer, 0);
                 byte[] keyByte = Encoding.UTF8.GetBytes(message);
                 keyByte.CopyTo(buffer, 0);
                 stream.Write(buffer, 0, buffer.Length);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Disconnected from Server", "System Notification", MessageBoxButtons.OK);
-                client.Close();
+                MessageBox.Show(ex.Message);
+                this.Close();
+                return;
             }
         }
 
@@ -110,7 +108,7 @@ namespace The_Application_Of_Asymetric_Cipher
                 AddMessageToChatWindow(message);
                 textMessage.Text = String.Empty;
             }
-            catch { }
+            catch { return; }
         }
 
         void AddMessageToChatWindow(string message) // Thêm tin vào khung chat
@@ -188,10 +186,10 @@ namespace The_Application_Of_Asymetric_Cipher
                 MessageBox.Show("Please enter your name!", "Missing Name Field", MessageBoxButtons.OK);
                 return;
             }
-            SetState(false);
             Thread cnt = new Thread(new ThreadStart(() => GetConnection()));
             cnt.IsBackground = true;
             cnt.Start();
+            SetState(false);
             isLogin = true;
         }
         private void Client_Advanced_FormClosed(object sender, FormClosedEventArgs e) { DisconnectFrom(); }

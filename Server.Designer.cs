@@ -47,6 +47,7 @@
             // textMessage
             // 
             textMessage.BackColor = SystemColors.Window;
+            textMessage.CausesValidation = false;
             textMessage.Dock = DockStyle.Fill;
             textMessage.Location = new Point(0, 0);
             textMessage.Multiline = true;
@@ -58,6 +59,7 @@
             // grb_Message
             // 
             grb_Message.BackgroundImage = Properties.Resources.NAMECARD_16;
+            grb_Message.CausesValidation = false;
             grb_Message.Controls.Add(panel_Top);
             grb_Message.Dock = DockStyle.Fill;
             grb_Message.Font = new Font("Monotype Corsiva", 13.8F, FontStyle.Italic, GraphicsUnit.Point);
@@ -99,6 +101,7 @@
             // grb_Notification
             // 
             grb_Notification.BackgroundImage = Properties.Resources.NAMECARD_16;
+            grb_Notification.CausesValidation = false;
             grb_Notification.Controls.Add(textNote);
             grb_Notification.Dock = DockStyle.Fill;
             grb_Notification.FlatStyle = FlatStyle.Flat;
@@ -113,6 +116,7 @@
             // 
             // textNote
             // 
+            textNote.CausesValidation = false;
             textNote.Dock = DockStyle.Fill;
             textNote.Location = new Point(3, 29);
             textNote.Multiline = true;

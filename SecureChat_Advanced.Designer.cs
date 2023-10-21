@@ -71,9 +71,9 @@
             btn_Client.FlatStyle = FlatStyle.Flat;
             btn_Client.Font = new Font("Monotype Corsiva", 19.8000011F, FontStyle.Italic, GraphicsUnit.Point);
             btn_Client.ForeColor = Color.Cyan;
-            btn_Client.Location = new Point(0, 220);
+            btn_Client.Location = new Point(0, 150);
             btn_Client.Name = "btn_Client";
-            btn_Client.Size = new Size(168, 220);
+            btn_Client.Size = new Size(168, 150);
             btn_Client.TabIndex = 1;
             btn_Client.Text = "Client";
             btn_Client.TextAlign = ContentAlignment.MiddleLeft;
@@ -92,7 +92,7 @@
             btn_Server.ForeColor = Color.Cyan;
             btn_Server.Location = new Point(0, 0);
             btn_Server.Name = "btn_Server";
-            btn_Server.Size = new Size(168, 220);
+            btn_Server.Size = new Size(168, 150);
             btn_Server.TabIndex = 0;
             btn_Server.Text = "Server";
             btn_Server.TextAlign = ContentAlignment.MiddleLeft;
@@ -134,22 +134,22 @@
             panel_icon_cli.BackgroundImageLayout = ImageLayout.Zoom;
             panel_icon_cli.Controls.Add(panel_icon_cl_off);
             panel_icon_cli.Dock = DockStyle.Top;
-            panel_icon_cli.Location = new Point(0, 220);
+            panel_icon_cli.Location = new Point(0, 150);
             panel_icon_cli.Name = "panel_icon_cli";
-            panel_icon_cli.Size = new Size(46, 220);
+            panel_icon_cli.Size = new Size(46, 150);
             panel_icon_cli.TabIndex = 5;
-            panel_icon_cli.Click += panel_icon_cli_Click;
-            panel_icon_cli.MouseEnter += panel_icon_cli_MouseEnter;
-            panel_icon_cli.MouseLeave += panel_icon_cli_MouseLeave;
+            panel_icon_cli.Click += btn_Client_Click;
+            panel_icon_cli.MouseEnter += btn_Client_MouseEnter;
+            panel_icon_cli.MouseLeave += btn_Client_MouseLeave;
             // 
             // panel_icon_cl_off
             // 
             panel_icon_cl_off.BackgroundImage = Properties.Resources.cli_off_removebg_preview;
             panel_icon_cl_off.BackgroundImageLayout = ImageLayout.Zoom;
-            panel_icon_cl_off.Dock = DockStyle.Top;
+            panel_icon_cl_off.Dock = DockStyle.Fill;
             panel_icon_cl_off.Location = new Point(0, 0);
             panel_icon_cl_off.Name = "panel_icon_cl_off";
-            panel_icon_cl_off.Size = new Size(46, 220);
+            panel_icon_cl_off.Size = new Size(46, 150);
             panel_icon_cl_off.TabIndex = 0;
             // 
             // panel_icon_sv
@@ -160,20 +160,20 @@
             panel_icon_sv.Dock = DockStyle.Top;
             panel_icon_sv.Location = new Point(0, 0);
             panel_icon_sv.Name = "panel_icon_sv";
-            panel_icon_sv.Size = new Size(46, 220);
+            panel_icon_sv.Size = new Size(46, 150);
             panel_icon_sv.TabIndex = 6;
-            panel_icon_sv.Click += panel_icon_sv_Click;
-            panel_icon_sv.MouseEnter += panel_icon_sv_MouseEnter;
-            panel_icon_sv.MouseLeave += panel_icon_sv_MouseLeave;
+            panel_icon_sv.Click += btn_Server_Click;
+            panel_icon_sv.MouseEnter += btn_Server_MouseEnter;
+            panel_icon_sv.MouseLeave += btn_Server_MouseLeave;
             // 
             // panel_icon_sv_off
             // 
             panel_icon_sv_off.BackgroundImage = Properties.Resources.sv_off_removebg_preview;
             panel_icon_sv_off.BackgroundImageLayout = ImageLayout.Zoom;
-            panel_icon_sv_off.Dock = DockStyle.Top;
+            panel_icon_sv_off.Dock = DockStyle.Fill;
             panel_icon_sv_off.Location = new Point(0, 0);
             panel_icon_sv_off.Name = "panel_icon_sv_off";
-            panel_icon_sv_off.Size = new Size(46, 220);
+            panel_icon_sv_off.Size = new Size(46, 150);
             panel_icon_sv_off.TabIndex = 0;
             // 
             // panel_Top_Button
@@ -225,6 +225,7 @@
             Controls.Add(panel_All);
             Name = "SecureChat_Advanced";
             Text = "SecureChat_Advanced";
+            FormClosed += SecureChat_Advanced_FormClosed;
             panel_Bottom_Button.ResumeLayout(false);
             panel_Right_Pillar.ResumeLayout(false);
             panel_Left_Pillar.ResumeLayout(false);

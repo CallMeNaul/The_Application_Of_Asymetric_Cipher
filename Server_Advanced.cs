@@ -53,7 +53,7 @@ namespace The_Application_Of_Asymetric_Cipher
             {
                 server = new TcpListener(IPAddress.Parse("127.0.0.1"), 8080);
                 server.Start();
-                textNote.AppendText("Server running on 127.0.0.1: 8080\n" + Environment.NewLine);
+                textNote.AppendText("Server running on 127.0.0.1: 8081\n" + Environment.NewLine);
                 Task.Run(() => AcceptClients());
             }
             catch (Exception ex)

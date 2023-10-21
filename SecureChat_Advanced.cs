@@ -26,8 +26,7 @@ namespace The_Application_Of_Asymetric_Cipher
         }
         static int numClient = 1;
         private Form currentFormChild;
-        private bool clickedServerButton = false;
-        private bool clickedClientButton = false;
+        private bool clickedServerButton = false, clickedClientButton = false;
         private void MousingButtonServer() { btn_Server.BackColor = Color.CornflowerBlue; }
         private void DisMousingButtonServer()
         {
@@ -74,6 +73,7 @@ namespace The_Application_Of_Asymetric_Cipher
             panel_icon_cli.Visible = true;
             panel_icon_cli.Enabled = true;
             panel_icon_sv_off.Visible = true;
+            panel_icon_cl_off.Visible = false;
         }
 
         private void OpenClient()
@@ -87,17 +87,20 @@ namespace The_Application_Of_Asymetric_Cipher
         }
         private void btn_Server_Click(object sender, EventArgs e) { OpenServer(); }
         private void btn_Client_Click(object sender, EventArgs e) { OpenClient(); }
-        private void panel_icon_sv_Click(object sender, EventArgs e) { OpenServer(); }
-        private void panel_icon_cli_Click(object sender, EventArgs e) { OpenClient(); }
 
         private void btn_Server_MouseEnter(object sender, EventArgs e) { MousingButtonServer(); }
-        private void panel_icon_sv_MouseEnter(object sender, EventArgs e) { MousingButtonServer(); }
         private void btn_Server_MouseLeave(object sender, EventArgs e) { DisMousingButtonServer(); }
-        private void panel_icon_sv_MouseLeave(object sender, EventArgs e) { DisMousingButtonServer(); }
 
         private void btn_Client_MouseEnter(object sender, EventArgs e) { MousingButtonClient(); }
-        private void panel_icon_cli_MouseEnter(object sender, EventArgs e) { MousingButtonClient(); }
         private void btn_Client_MouseLeave(object sender, EventArgs e) { DisMousingButtonClient(); }
-        private void panel_icon_cli_MouseLeave(object sender, EventArgs e) { DisMousingButtonClient(); }
+
+        private void SecureChat_Advanced_FormClosed(object sender, FormClosedEventArgs e) 
+        {
+            if (currentFormChild != null)
+            {
+                currentFormChild.Close();
+            }
+            currentFormChild = new Form();
+        }
     }
 }

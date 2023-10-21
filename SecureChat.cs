@@ -44,8 +44,6 @@ namespace The_Application_Of_Asymetric_Cipher
             else
                 btn_Server.BackColor = Color.Gold;
         }
-        private void MousingButtonExit() { btn_Exit.BackColor = Color.CornflowerBlue; }
-        private void DisMousingButtonExit() { btn_Exit.BackColor = Color.MidnightBlue; }
         private void MousingButtonClient() { btn_Client.BackColor = Color.CornflowerBlue; }
         private void DisMousingButtonClient()
         {
@@ -90,9 +88,13 @@ namespace The_Application_Of_Asymetric_Cipher
         private void btn_Client_MouseEnter(object sender, EventArgs e) { MousingButtonClient(); }
         private void btn_Client_MouseLeave(object sender, EventArgs e) { DisMousingButtonClient(); }
 
-        private void btn_Exit_Click(object sender, EventArgs e) { this.Close(); }
-
-        private void btn_Exit_MouseEnter(object sender, EventArgs e) { MousingButtonExit(); }
-        private void panel1_MouseLeave(object sender, EventArgs e) { DisMousingButtonExit(); }
+        private void SecureChat_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (currentFormChild != null)
+            {
+                currentFormChild.Close();
+            }
+            currentFormChild = new Form();
+        }
     }
 }

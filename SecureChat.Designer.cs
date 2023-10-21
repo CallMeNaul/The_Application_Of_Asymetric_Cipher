@@ -37,9 +37,7 @@
             btn_icon_sv_off = new Button();
             panel_Bottom_Button = new Panel();
             panel_Right_Pillar = new Panel();
-            btn_Exit = new Button();
             panel_Left_Pillar = new Panel();
-            panel1 = new Panel();
             panel_Top_Button = new Panel();
             label2 = new Label();
             panel_Column = new Panel();
@@ -173,7 +171,6 @@
             // 
             // panel_Right_Pillar
             // 
-            panel_Right_Pillar.Controls.Add(btn_Exit);
             panel_Right_Pillar.Controls.Add(btn_Client);
             panel_Right_Pillar.Controls.Add(btn_Server);
             panel_Right_Pillar.Dock = DockStyle.Right;
@@ -182,28 +179,8 @@
             panel_Right_Pillar.Size = new Size(168, 440);
             panel_Right_Pillar.TabIndex = 2;
             // 
-            // btn_Exit
-            // 
-            btn_Exit.BackColor = Color.MidnightBlue;
-            btn_Exit.Dock = DockStyle.Top;
-            btn_Exit.FlatAppearance.BorderSize = 0;
-            btn_Exit.FlatStyle = FlatStyle.Flat;
-            btn_Exit.Font = new Font("Monotype Corsiva", 19.8000011F, FontStyle.Italic, GraphicsUnit.Point);
-            btn_Exit.ForeColor = Color.Cyan;
-            btn_Exit.Location = new Point(0, 300);
-            btn_Exit.Name = "btn_Exit";
-            btn_Exit.Size = new Size(168, 140);
-            btn_Exit.TabIndex = 2;
-            btn_Exit.Text = "Exit";
-            btn_Exit.TextAlign = ContentAlignment.MiddleLeft;
-            btn_Exit.UseVisualStyleBackColor = false;
-            btn_Exit.Click += btn_Exit_Click;
-            btn_Exit.MouseEnter += btn_Exit_MouseEnter;
-            btn_Exit.MouseLeave += panel1_MouseLeave;
-            // 
             // panel_Left_Pillar
             // 
-            panel_Left_Pillar.Controls.Add(panel1);
             panel_Left_Pillar.Controls.Add(panel_icon_cl_off);
             panel_Left_Pillar.Controls.Add(panel_icon_sv);
             panel_Left_Pillar.Dock = DockStyle.Left;
@@ -211,19 +188,6 @@
             panel_Left_Pillar.Name = "panel_Left_Pillar";
             panel_Left_Pillar.Size = new Size(46, 440);
             panel_Left_Pillar.TabIndex = 7;
-            // 
-            // panel1
-            // 
-            panel1.BackgroundImage = Properties.Resources.crossx_removebg_preview;
-            panel1.BackgroundImageLayout = ImageLayout.Zoom;
-            panel1.Dock = DockStyle.Top;
-            panel1.Location = new Point(0, 300);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(46, 140);
-            panel1.TabIndex = 1;
-            panel1.Click += btn_Exit_Click;
-            panel1.MouseEnter += btn_Exit_MouseEnter;
-            panel1.MouseLeave += panel1_MouseLeave;
             // 
             // panel_Top_Button
             // 
@@ -277,6 +241,7 @@
             Font = new Font("Monotype Corsiva", 9F, FontStyle.Italic, GraphicsUnit.Point);
             Name = "SecureChat";
             Text = "SecureChat";
+            FormClosed += SecureChat_FormClosed;
             panel_icon_cl_off.ResumeLayout(false);
             panel_icon_sv.ResumeLayout(false);
             panel_Bottom_Button.ResumeLayout(false);
@@ -307,7 +272,5 @@
         private Button btn_icon_sv_off;
         private Button btn_icon_cli;
         private Label label2;
-        private Button btn_Exit;
-        private Panel panel1;
     }
 }
