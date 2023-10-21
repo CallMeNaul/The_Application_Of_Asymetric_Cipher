@@ -105,7 +105,7 @@
             btn_Advanced.FlatStyle = FlatStyle.Popup;
             btn_Advanced.Font = new Font("Ravie", 19.8000011F, FontStyle.Regular, GraphicsUnit.Point);
             btn_Advanced.ForeColor = SystemColors.Window;
-            btn_Advanced.Location = new Point(355, 22);
+            btn_Advanced.Location = new Point(356, 22);
             btn_Advanced.Name = "btn_Advanced";
             btn_Advanced.Size = new Size(449, 55);
             btn_Advanced.TabIndex = 2;
