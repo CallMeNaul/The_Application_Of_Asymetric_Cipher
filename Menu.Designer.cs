@@ -232,6 +232,8 @@
             panel_label.Size = new Size(157, 50);
             panel_label.TabIndex = 4;
             panel_label.Click += panel_label_Click;
+            panel_label.MouseEnter += panel_label_MouseEnter;
+            panel_label.MouseLeave += panel_label_MouseLeave;
             // 
             // label_Back
             // 
@@ -243,6 +245,8 @@
             label_Back.TabIndex = 0;
             label_Back.Text = "Back";
             label_Back.Click += panel_label_Click;
+            label_Back.MouseEnter += panel_label_MouseEnter;
+            label_Back.MouseLeave += panel_label_MouseLeave;
             // 
             // panel_Exit_Image
             // 
@@ -254,6 +258,8 @@
             panel_Exit_Image.Size = new Size(56, 50);
             panel_Exit_Image.TabIndex = 5;
             panel_Exit_Image.Click += panel_label_Click;
+            panel_Exit_Image.MouseEnter += panel_label_MouseEnter;
+            panel_Exit_Image.MouseLeave += panel_label_MouseLeave;
             // 
             // Menu
             // 

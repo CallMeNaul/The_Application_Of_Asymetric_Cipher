@@ -91,5 +91,9 @@ namespace The_Application_Of_Asymetric_Cipher
             ChangeUI(false);
             this.Text = "Menu";
         }
+        private void MousingButtonBack() { panel_label.BackColor = Color.CornflowerBlue; }
+        private void DisMousingButtonBack() { panel_label.BackColor = Color.MidnightBlue; }
+        private void panel_label_MouseEnter(object sender, EventArgs e) { MousingButtonBack(); }
+        private void panel_label_MouseLeave(object sender, EventArgs e) { DisMousingButtonBack(); }
     }
 }
