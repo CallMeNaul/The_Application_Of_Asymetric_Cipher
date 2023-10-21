@@ -137,7 +137,7 @@ namespace The_Application_Of_Asymetric_Cipher
                         BroadcastMessage(plainText, client);
                     }
                 }
-                catch { break; }
+                catch { this.Close(); break; }
             }
         }
 
@@ -157,14 +157,18 @@ namespace The_Application_Of_Asymetric_Cipher
                         netStream.Write(buffer, 0, buffer.Length);
                     }
                 }
-                catch (Exception) { }
+                catch { }
             }
         }
 
         private void Server_FormClosed(object sender, FormClosedEventArgs e)
         {
-            clients.Clear();
             server.Stop();
+            foreach (var client in clients)
+            {
+                client.tcpClient.Close();
+            }
+            clients.Clear();
         }
         public string RSAEncrypt(string plainText, RSAParameters key)   // Mã hóa thông tin để gửi đi
         {

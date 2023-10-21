@@ -35,7 +35,6 @@ namespace The_Application_Of_Asymetric_Cipher
         NetworkStream stream;
         RSAParameters rsaPa;
         byte[] buffer = new byte[1024 * 5];
-        bool isLogin = false;
         // Tạo lớp để lưu trữ khóa của các Client khác
         public class KeyTCPClient
         {
@@ -91,10 +90,8 @@ namespace The_Application_Of_Asymetric_Cipher
 
         void DisconnectFrom() // Ngắt kết nối
         {
-            if (client != null)
-                client.Close();
-            if (stream != null)
-                stream.Close();
+            if (client != null) client.Close();
+            if (stream != null) stream.Close();
         }
 
         void SendMessage()  // Gửi tin nhắn
@@ -108,7 +105,7 @@ namespace The_Application_Of_Asymetric_Cipher
                 AddMessageToChatWindow(message);
                 textMessage.Text = String.Empty;
             }
-            catch { return; }
+            catch { }
         }
 
         void AddMessageToChatWindow(string message) // Thêm tin vào khung chat
@@ -138,7 +135,7 @@ namespace The_Application_Of_Asymetric_Cipher
                         var posLineBreak = message.IndexOf('\n');
                         var posColon = message.IndexOf(':');
                         var port = int.Parse(message.Substring(posColon + 1, posLineBreak - posColon - 1));
-                        var rsaPa = StringToKey(message.Substring(posLineBreak + 1));
+                        rsaPa = StringToKey(message.Substring(posLineBreak + 1));
                         if (!clients.Contains(new KeyTCPClient(port, rsaPa)))
                             clients.Add(new KeyTCPClient(port, rsaPa));
                         Array.Clear(buffer);
@@ -166,12 +163,10 @@ namespace The_Application_Of_Asymetric_Cipher
                         AddMessageToChatWindow(plainText);
                     }
                 }
-                catch
-                {
-                    DisconnectFrom();
-                    return;
-                }
+                catch { break; }
             }
+            this.Close();
+            return;
         }
 
         private void btSend_Click(object sender, EventArgs e)
@@ -186,11 +181,10 @@ namespace The_Application_Of_Asymetric_Cipher
                 MessageBox.Show("Please enter your name!", "Missing Name Field", MessageBoxButtons.OK);
                 return;
             }
-            Thread cnt = new Thread(new ThreadStart(() => GetConnection()));
+            Thread cnt = new Thread(() => GetConnection());
             cnt.IsBackground = true;
             cnt.Start();
             SetState(false);
-            isLogin = true;
         }
         private void Client_Advanced_FormClosed(object sender, FormClosedEventArgs e) { DisconnectFrom(); }
         // Tạo các biến cho quá trình mã hóa

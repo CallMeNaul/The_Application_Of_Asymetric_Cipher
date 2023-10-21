@@ -33,7 +33,6 @@ namespace The_Application_Of_Asymetric_Cipher
         TcpClient client;
         NetworkStream stream;
         byte[] buffer = new byte[1024 * 4];
-        bool isLogin = false;
 
         void SetState(bool value)   // Tạo trạng thái của giao diện: Đăng nhập và Chat
         {
@@ -61,14 +60,12 @@ namespace The_Application_Of_Asymetric_Cipher
             {
                 client = new TcpClient("127.0.0.1", 8080);
                 stream = client.GetStream();
-                string message = "New client connected from 127.0.0.1 " + textName.Text + "\n";
+                string message = "New client connected from 127.0.0.1 " + textName.Text + "\n" + publicKey;
                 Thread rec = new Thread(ReceiveMessage);
                 rec.IsBackground = true;
                 rec.Start();
-                byte[] flag = Encoding.UTF8.GetBytes(message);
-                byte[] keyByte = Encoding.UTF8.GetBytes(publicKey);
-                flag.CopyTo(buffer, 0);
-                keyByte.CopyTo(buffer, flag.Length);
+                byte[] keyByte = Encoding.UTF8.GetBytes(message);
+                keyByte.CopyTo(buffer, 0);
                 stream.Write(buffer, 0, buffer.Length);
             }
             catch (Exception ex)
@@ -96,13 +93,10 @@ namespace The_Application_Of_Asymetric_Cipher
                 AddMessageToChatWindow(message);
                 textMessage.Text = String.Empty;
             }
-            catch { return; }
+            catch { }
         }
-
-        void AddMessageToChatWindow(string message) // Thêm tin vào khung chat
-        {
-            textDisplayMessage.AppendText($"{message}{Environment.NewLine}");
-        }
+        // Thêm tin vào khung chat
+        void AddMessageToChatWindow(string message) { textDisplayMessage.AppendText($"{message}{Environment.NewLine}"); }
         void ReceiveMessage()   // Nhận tin
         {
             byte[] buffer = new byte[1024 * 4];
@@ -117,19 +111,17 @@ namespace The_Application_Of_Asymetric_Cipher
                     String plainText = RSADecrypt(message, privateKey);
                     AddMessageToChatWindow(plainText);
                 }
-                catch
-                {
-                    DisconnectFrom();
-                    return;
-                }
+                catch { break; }
             }
+            this.Close();
+            return;
         }
 
         private void Client_FormClosed(object sender, FormClosedEventArgs e) { DisconnectFrom(); }
 
         private void btSend_Click(object sender, EventArgs e)
         {
-            if (textMessage.Text != "")
+            if (textMessage.Text != "" && client.Connected)
                 SendMessage();
         }
 
@@ -141,10 +133,9 @@ namespace The_Application_Of_Asymetric_Cipher
                 return;
             }
             SetState(false);
-            Thread cnt = new Thread(new ThreadStart(() => GetConnection()));
+            Thread cnt = new Thread(() => GetConnection());
             cnt.IsBackground = true;
             cnt.Start();
-            isLogin = true;
         }
         // Tạo các biến cho quá trình mã hóa
         private RSACryptoServiceProvider csp = new RSACryptoServiceProvider(2048);

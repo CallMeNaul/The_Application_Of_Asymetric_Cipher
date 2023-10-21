@@ -32,7 +32,6 @@ namespace The_Application_Of_Asymetric_Cipher
         private TcpListener server;
         private TcpClient client;
         private NetworkStream stream;
-        private RSAParameters rsaPa;
 
         // Tạo một lớp để lưu trữ các kết nối và khóa công khai của Client.
         public class KeyTCPClient
@@ -170,28 +169,15 @@ namespace The_Application_Of_Asymetric_Cipher
                 catch { }
             }
         }
-        public string RSAEncrypt(string plainText, RSAParameters key)   // Mã hóa thông tin để gửi đi
-        {
-            RSACryptoServiceProvider csp = new RSACryptoServiceProvider();
-            csp.ImportParameters(key);
-            var buffer = Encoding.UTF8.GetBytes(plainText);
-            var cypher = csp.Encrypt(buffer, false);
-            return Convert.ToBase64String(cypher);
-        }
-
-        public string RSADecrypt(string cipherText, RSAParameters key)  // Giải mã thông tin từ Client gửi đến
-        {
-            RSACryptoServiceProvider csp = new RSACryptoServiceProvider();
-            var buffer = Convert.FromBase64String(cipherText);
-            csp.ImportParameters(key);
-            var plainText = csp.Decrypt(buffer, false);
-            return Encoding.UTF8.GetString(plainText);
-        }
-
         private void Server_Advanced_FormClosed(object sender, FormClosedEventArgs e)
         {
-            clients.Clear();
             server.Stop();
+            foreach (var client in clients)
+            {
+                client.tcpClient.Close();
+            }
+            clients.Clear();
+            if(stream != null) stream.Dispose();
         }
     }
 }
