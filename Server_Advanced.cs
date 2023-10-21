@@ -173,11 +173,10 @@ namespace The_Application_Of_Asymetric_Cipher
         {
             server.Stop();
             foreach (var client in clients)
-            {
                 client.tcpClient.Close();
-            }
             clients.Clear();
-            if(stream != null) stream.Dispose();
+            if (client != null) client.Close();
+            if (stream != null) stream.Dispose();
         }
     }
 }

@@ -34,9 +34,7 @@ namespace The_Application_Of_Asymetric_Cipher
                 panel_Options.Visible = true;
                 panel_Chat.Visible = false;
                 if (currentFormChild != null)
-                {
                     currentFormChild.Close();
-                }
                 currentFormChild = new Form();
             }
         }
@@ -62,9 +60,7 @@ namespace The_Application_Of_Asymetric_Cipher
         private void OpenChildForm(Form childForm)
         {
             if (currentFormChild != null)
-            {
                 currentFormChild.Close();
-            }
             this.Size = new Size(990, 651);
             panel_Chat.Dock = DockStyle.Fill;
             currentFormChild = childForm;

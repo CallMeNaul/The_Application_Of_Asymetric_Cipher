@@ -165,10 +165,10 @@ namespace The_Application_Of_Asymetric_Cipher
         {
             server.Stop();
             foreach (var client in clients)
-            {
                 client.tcpClient.Close();
-            }
             clients.Clear();
+            if(client != null) client.Close();
+            if(stream != null) stream.Dispose();
         }
         public string RSAEncrypt(string plainText, RSAParameters key)   // Mã hóa thông tin để gửi đi
         {
